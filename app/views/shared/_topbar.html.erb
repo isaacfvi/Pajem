@@ -1,0 +1,21 @@
+<header class="topbar">
+  <a href="<%= root_path %>" class="topbar__brand">&#9876; Pajem</a>
+
+  <div class="topbar__actions">
+    <button class="topbar__theme-btn"
+            data-controller="theme"
+            data-action="click->theme#toggle"
+            aria-label="Alternar tema">
+      <span data-theme-target="icon">&#9728;</span>
+    </button>
+
+    <a href="#" class="topbar__user">
+      <div class="topbar__avatar"><%= current_user.name.first.upcase %></div>
+      <span><%= current_user.name %></span>
+    </a>
+
+    <%= button_to logout_path, method: :delete, class: "topbar__logout-btn", aria: { label: "Sair" } do %>
+      &#x2192;&#x7C;
+    <% end %>
+  </div>
+</header>
