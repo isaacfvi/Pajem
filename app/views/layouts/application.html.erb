@@ -44,14 +44,16 @@
         <main class="content-area">
           <%= render "shared/flash" %>
 
-          <div class="content-header">
-            <h1 class="content-header__title">
-              <%= content_for?(:page_title) ? yield(:page_title) : "Pajem" %>
-            </h1>
-            <div class="content-header__actions">
-              <a href="#" class="btn btn--primary">+ Nova Lista</a>
+          <% unless content_for?(:hide_content_header) %>
+            <div class="content-header">
+              <h1 class="content-header__title">
+                <%= content_for?(:page_title) ? yield(:page_title) : "Pajem" %>
+              </h1>
+              <div class="content-header__actions">
+                <%= link_to "+ Nova Lista", new_list_path, class: "btn btn--primary" %>
+              </div>
             </div>
-          </div>
+          <% end %>
 
           <%= yield %>
         </main>

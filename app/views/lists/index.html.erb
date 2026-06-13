@@ -1,39 +1,50 @@
-<% content_for :page_title, @active_context&.name || "Todas as listas" %>
+<% content_for :hide_content_header, "1" %>
 
-<div data-controller="list-expand">
+<div class="lists-page" data-controller="list-expand">
+
+  <%# Header do grid — visível enquanto nenhuma lista está aberta %>
+  <div class="content-header" data-list-expand-target="gridHeader">
+    <h1 class="content-header__title"><%= @active_context&.name || "Todas as listas" %></h1>
+    <div class="content-header__actions">
+      <%= link_to "+ Nova Lista", new_list_path, class: "btn btn--primary" %>
+    </div>
+  </div>
+
   <%# Grid de post-its %>
   <div class="postit-grid" data-list-expand-target="grid">
     <% @lists.each do |list| %>
       <%
-        all_items   = list.items.reject(&:discarded?)
-        pending     = all_items.reject(&:completed).count
-        completed   = all_items.count(&:completed)
-        total       = all_items.count
-        progress    = total.zero? ? 0 : (completed.to_f / total * 100).round
-        bg_style    = list.color.present? ? "background-color: #{list.color};" : nil
+        all_items    = list.items.reject(&:discarded?)
+        pending      = all_items.reject(&:completed).count
+        palette      = List::PALETTE.find { |p| p[:bg] == list.color }
+        color_class  = palette ? "colored-card #{palette[:css]}" : ""
       %>
-      <div class="postit"
+      <div class="postit <%= color_class %>"
            data-action="click->list-expand#expand"
-           data-list-expand-list-id-param="<%= list.id %>"
-           <%= "style=\"#{bg_style}\"" if bg_style %>>
+           data-list-expand-list-id-param="<%= list.id %>">
         <div class="postit__header">
           <span class="postit__title"><%= list.title %></span>
-          <button class="postit__menu-btn"
-                  data-action="click->list-expand#noop:stop"
-                  aria-label="Opções">&#8943;</button>
+          <div class="postit__actions" data-action="click->list-expand#noop:stop">
+            <%= link_to edit_list_path(list), class: "postit__action-btn", title: "Editar lista" do %>&#9998;<% end %>
+            <%= button_to list_path(list), method: :delete,
+                  class: "postit__action-btn postit__action-btn--danger",
+                  title: "Excluir lista",
+                  form: { class: "postit__action-form" } do %>&#10005;<% end %>
+          </div>
         </div>
         <div class="postit__meta">
           <%= pending == 1 ? "1 item pendente" : "#{pending} itens pendentes" %>
         </div>
-        <div class="postit__progress-bar">
-          <div class="postit__progress-fill" style="width: <%= progress %>%"></div>
+        <div id="<%= dom_id(list, :progress) %>">
+          <%= render "lists/progress_bar", list: list %>
         </div>
       </div>
     <% end %>
 
     <% if @lists.empty? %>
       <div class="postit postit--empty">
-        <p>Nenhuma lista ainda. Crie sua primeira lista!</p>
+        <p>Nenhuma lista ainda.</p>
+        <%= link_to "Criar primeira lista", new_list_path, class: "btn btn--primary postit__empty-cta" %>
       </div>
     <% end %>
   </div>
@@ -41,30 +52,32 @@
   <%# Painéis expandidos — pré-renderizados, ocultos via CSS %>
   <% @lists.each do |list| %>
     <%
-      all_items = list.items.reject(&:discarded?)
-      total     = all_items.count
-      completed = all_items.count(&:completed)
-      progress  = total.zero? ? 0 : (completed.to_f / total * 100).round
+      all_items   = list.items.reject(&:discarded?)
+      palette     = List::PALETTE.find { |p| p[:bg] == list.color }
+      color_class = palette ? "colored-card #{palette[:css]}" : ""
     %>
-    <div class="list-expanded hidden"
+    <div class="list-expanded hidden <%= color_class %>"
          data-list-expand-target="panel"
          data-list-id="<%= list.id %>">
+
       <div class="list-expanded__header">
         <div>
           <h2 class="list-expanded__title"><%= list.title %></h2>
-          <% if list.context %>
-            <p class="list-expanded__description"><%= list.context.name %></p>
+          <% if list.description.present? || list.context %>
+            <p class="list-expanded__subtitle">
+              <%= list.description.presence || list.context&.name %>
+            </p>
           <% end %>
         </div>
         <div class="list-expanded__header-actions">
+          <%= link_to "Editar", edit_list_path(list), class: "btn btn--ghost" %>
           <a href="#" class="btn btn--primary">+ Novo Item</a>
-          <button class="btn btn--ghost"
-                  data-action="click->list-expand#collapse">Fechar</button>
+          <button class="btn btn--ghost" data-action="click->list-expand#collapse">Fechar</button>
         </div>
       </div>
 
-      <div class="postit__progress-bar">
-        <div class="postit__progress-fill" style="width: <%= progress %>%"></div>
+      <div id="<%= dom_id(list, :progress) %>_panel">
+        <%= render "lists/progress_bar", list: list %>
       </div>
 
       <div class="list-expanded__items">
@@ -78,6 +91,8 @@
           <p class="list-expanded__empty">Nenhum item nesta lista.</p>
         <% end %>
       </div>
+
     </div>
   <% end %>
+
 </div>

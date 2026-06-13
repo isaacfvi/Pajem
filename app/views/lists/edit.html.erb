@@ -1,0 +1,7 @@
+<% content_for :page_title, "Editar Lista" %>
+
+<%= render "form",
+      list: @list,
+      url: list_path(@list),
+      title: "Editar \"#{@list.title}\"",
+      submit_label: "Salvar Alterações" %>
