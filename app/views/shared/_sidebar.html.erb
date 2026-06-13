@@ -1,0 +1,111 @@
+<nav class="sidebar" aria-label="Navegação principal" data-controller="context-delete">
+  <a href="#" class="sidebar__link">
+    <span class="sidebar__link-icon">&#9706;</span>
+    Dashboard
+  </a>
+
+  <div class="sidebar__divider"></div>
+
+  <p class="sidebar__section-label">Listas</p>
+
+  <a href="<%= lists_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == lists_path && params[:context_id].blank? %>">
+    <span class="sidebar__link-icon">&#9776;</span>
+    Todas as listas
+  </a>
+
+  <%= link_to "+ Nova Lista", new_list_path, class: "sidebar__action" %>
+
+  <div class="sidebar__divider"></div>
+
+  <p class="sidebar__section-label">Workspaces</p>
+
+  <% @sidebar_contexts.each do |context| %>
+    <div class="sidebar__context-item">
+      <a href="<%= lists_path(context_id: context.id) %>"
+         class="sidebar__link <%= 'sidebar__link--active' if params[:context_id] == context.id.to_s %>">
+        <span class="sidebar__link-icon">&#9670;</span>
+        <%= context.name %>
+      </a>
+      <div class="sidebar__context-actions">
+        <%= link_to edit_context_path(context), class: "sidebar__context-btn", title: "Editar workspace" do %>
+          &#9998;
+        <% end %>
+        <button class="sidebar__context-btn sidebar__context-btn--danger"
+                title="Excluir workspace"
+                data-action="click->context-delete#open"
+                data-context-delete-name-param="<%= context.name %>"
+                data-context-delete-id-param="<%= context.id %>">
+          &#10005;
+        </button>
+      </div>
+    </div>
+  <% end %>
+
+  <div data-controller="inline-context">
+    <button class="sidebar__action"
+            data-inline-context-target="trigger"
+            data-action="click->inline-context#open">
+      + Novo Workspace
+    </button>
+
+    <div class="hidden" data-inline-context-target="form">
+      <%= form_with model: ::Context.new do |f| %>
+        <div class="sidebar__inline-form">
+          <%= f.text_field :name,
+                class: "sidebar__inline-input",
+                placeholder: "Nome do workspace…",
+                autocomplete: "off",
+                data: {
+                  "inline-context-target": "input",
+                  action: "keydown->inline-context#handleKey"
+                } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="sidebar__divider"></div>
+
+  <a href="#" class="sidebar__link">
+    <span class="sidebar__link-icon">&#128465;</span>
+    Lixeira
+  </a>
+
+  <%# Modal de exclusão de workspace %>
+  <div class="delete-modal hidden" data-context-delete-target="modal">
+    <div class="delete-modal__backdrop" data-action="click->context-delete#close"></div>
+    <div class="delete-modal__box">
+      <h3 class="delete-modal__title">
+        Excluir "<span data-context-delete-target="contextName"></span>"?
+      </h3>
+      <p class="delete-modal__text">
+        O que fazer com as listas associadas a este workspace?
+      </p>
+
+      <form method="post" data-context-delete-target="form">
+        <input type="hidden" name="_method" value="delete">
+        <input type="hidden" name="authenticity_token" data-context-delete-target="token">
+        <input type="hidden" name="delete_lists" value="false" data-context-delete-target="deleteLists">
+
+        <div class="delete-modal__actions">
+          <button type="button"
+                  class="btn btn--ghost"
+                  data-action="click->context-delete#keep">
+            Manter listas
+          </button>
+          <button type="button"
+                  class="delete-modal__danger-btn"
+                  data-action="click->context-delete#remove">
+            Excluir workspace e listas
+          </button>
+        </div>
+      </form>
+
+      <button class="delete-modal__cancel"
+              data-action="click->context-delete#close">
+        Cancelar
+      </button>
+    </div>
+  </div>
+</nav>

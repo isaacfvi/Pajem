@@ -1,0 +1,7 @@
+<% content_for :page_title, "Nova Lista" %>
+
+<%= render "form",
+      list: @list,
+      url: lists_path,
+      title: "Nova Lista",
+      submit_label: "Criar Lista" %>

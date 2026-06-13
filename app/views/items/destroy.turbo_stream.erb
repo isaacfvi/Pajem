@@ -1,0 +1,7 @@
+<%= turbo_stream.remove dom_id(@item) %>
+<%= turbo_stream.update dom_id(@list, :progress) do %>
+  <%= render "lists/progress_bar", list: @list %>
+<% end %>
+<%= turbo_stream.update "#{dom_id(@list, :progress)}_panel" do %>
+  <%= render "lists/progress_bar", list: @list %>
+<% end %>

@@ -1,0 +1,218 @@
+/* ─── Widget flutuante ──────────────────────────────────────────────── */
+.pajem-widget {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding: 1rem;
+  padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px));
+  padding-right: calc(1rem + env(safe-area-inset-right, 0px));
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.pajem-widget__btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: block;
+}
+
+.pajem-widget__avatar {
+  width: clamp(52px, 7vw, 68px);
+  height: clamp(52px, 7vw, 68px);
+  border-radius: 50%;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 0 4px 16px rgba(255, 92, 19, 0.35);
+  object-fit: cover;
+  display: block;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.pajem-widget__btn:hover .pajem-widget__avatar {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(255, 92, 19, 0.5);
+}
+
+.pajem-widget__avatar-placeholder {
+  width: clamp(52px, 7vw, 68px);
+  height: clamp(52px, 7vw, 68px);
+  border-radius: 50%;
+  border: 3px solid var(--color-secondary);
+  box-shadow: 0 4px 16px rgba(255, 92, 19, 0.35);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #fff;
+  transition: transform 0.15s, box-shadow 0.15s;
+  user-select: none;
+}
+
+.pajem-widget__btn:hover .pajem-widget__avatar-placeholder {
+  transform: scale(1.08);
+  box-shadow: 0 6px 24px rgba(255, 92, 19, 0.5);
+}
+
+/* ─── Painel de chat ────────────────────────────────────────────────── */
+.pajem-chat {
+  width: min(90vw, 22rem);
+  max-height: 60vh;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.pajem-chat[hidden] {
+  display: none !important;
+}
+
+.pajem-chat__header {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 1rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.pajem-chat__header-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.pajem-chat__header-avatar-placeholder {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  background-color: var(--color-primary-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.pajem-chat__header-name {
+  flex: 1;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.pajem-chat__close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.25rem;
+  padding: 0.2rem;
+  border-radius: 4px;
+  line-height: 1;
+  opacity: 0.8;
+  transition: opacity 0.12s;
+}
+
+.pajem-chat__close:hover {
+  opacity: 1;
+}
+
+.pajem-chat__messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-height: 0;
+}
+
+.pajem-chat__welcome {
+  text-align: center;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+}
+
+.pajem-chat__footer {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-top: 1px solid var(--color-border);
+  flex-shrink: 0;
+}
+
+.pajem-chat__input {
+  flex: 1;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  outline: none;
+  min-width: 0;
+}
+
+.pajem-chat__input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 2px rgba(150, 51, 255, 0.15);
+}
+
+.pajem-chat__send {
+  padding: 0.5rem 0.875rem;
+  background-color: var(--color-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.12s;
+  flex-shrink: 0;
+}
+
+.pajem-chat__send:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* ─── View Transition — zoom do botão para o painel ────────────────── */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+::view-transition-group(pajem-panel) {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+::view-transition-old(pajem-panel) {
+  animation: none;
+  opacity: 0;
+}
+
+::view-transition-new(pajem-panel) {
+  animation: pajem-fade-in 0.22s ease 0.12s both;
+}
+
+@keyframes pajem-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}

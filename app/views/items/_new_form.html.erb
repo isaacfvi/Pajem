@@ -1,0 +1,21 @@
+<%= form_with model: [ list, item ], class: "item-new-form" do |f| %>
+  <% if item.errors.any? %>
+    <div class="form-error-list">
+      <% item.errors.full_messages.each do |msg| %>
+        <span class="form-error-list__item">&#9679; <%= msg %></span>
+      <% end %>
+    </div>
+  <% end %>
+  <div class="item-new-form__row">
+    <%= f.text_field :title,
+          class: "form-input item-new-form__title #{'form-input--error' if item.errors[:title].any?}",
+          placeholder: "Novo item…",
+          autocomplete: "off" %>
+    <%= f.date_field :due_date, class: "form-input item-new-form__date" %>
+    <%= f.select :priority,
+          [["Baixa", "low"], ["Média", "medium"], ["Alta", "high"]],
+          { include_blank: "Prioridade" },
+          class: "form-input form-select item-new-form__priority" %>
+    <%= f.submit "Adicionar", class: "btn btn--primary btn--sm" %>
+  </div>
+<% end %>

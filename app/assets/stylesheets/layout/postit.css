@@ -1,0 +1,488 @@
+/* ─── Grid de post-its ──────────────────────────────────────────────── */
+.postit-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: 1.25rem;
+}
+
+/* ─── Card post-it ──────────────────────────────────────────────────── */
+.postit {
+  border-radius: 10px;
+  border-top: 4px solid var(--color-primary);
+  background-color: var(--color-bg-surface);
+  box-shadow: 0 2px 12px rgba(150, 51, 255, 0.1);
+  padding: 1rem 1rem 0.875rem;
+  cursor: pointer;
+  transition: box-shadow 0.15s, transform 0.1s;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.postit:hover {
+  box-shadow: 0 4px 20px rgba(150, 51, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.postit__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.postit__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
+.postit__actions {
+  display: none;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.postit:hover .postit__actions {
+  display: flex;
+}
+
+.postit__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.postit__action-btn:hover {
+  background-color: rgba(150, 51, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.postit__action-btn--danger:hover {
+  background-color: rgba(255, 92, 19, 0.12);
+  color: var(--color-secondary);
+}
+
+.postit__action-form {
+  display: contents;
+}
+
+.postit__empty-cta {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.postit__meta {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+}
+
+.postit__progress-bar {
+  height: 4px;
+  background-color: var(--color-border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-top: auto;
+}
+
+.postit__progress-fill {
+  height: 100%;
+  background-color: var(--color-primary);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.postit--empty {
+  cursor: default;
+  border-top-color: var(--color-border);
+  box-shadow: none;
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+}
+
+.postit--empty:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ─── Wrapper da página de listas ───────────────────────────────────── */
+.lists-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Modo expandido: propaga flex:1 até o card preencher a content-area */
+.lists-page--expanded {
+  flex: 1;
+  min-height: 0;
+}
+
+/* ─── Lista expandida (post-it grande) ──────────────────────────────── */
+.list-expanded {
+  border-radius: 10px;
+  border-top: 4px solid var(--color-primary);
+  background-color: var(--color-bg-surface);
+  box-shadow: 0 4px 32px rgba(150, 51, 255, 0.12);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.lists-page--expanded .list-expanded {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.list-expanded__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.25);
+}
+
+.list-expanded__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.list-expanded__subtitle {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  margin-top: 0.2rem;
+}
+
+.list-expanded__header-actions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.list-expanded__items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+  flex: 1;
+}
+
+/* ─── Itens da lista ────────────────────────────────────────────────── */
+.list-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  font-size: 0.875rem;
+  color: var(--color-text);
+}
+
+.list-item--completed {
+  opacity: 0.6;
+}
+
+.list-item--overdue {
+  border-color: rgba(220, 53, 69, 0.35);
+  background-color: rgba(220, 53, 69, 0.04);
+}
+
+/* Checkbox customizado (via button_to) */
+.list-item__check-form {
+  display: contents;
+}
+
+.list-item__check-form button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.list-item__checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: transparent;
+  transition: background 0.1s, border-color 0.1s;
+}
+
+.list-item__checkbox--checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+/* Corpo do item */
+.list-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.list-item__title {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item--completed .list-item__title {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.list-item__desc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item__meta {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.1rem;
+}
+
+.list-item__due {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.list-item__due--overdue {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.list-item__priority {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.list-item__priority--high {
+  background: rgba(220, 53, 69, 0.12);
+  color: #c82333;
+}
+
+[data-theme="dark"] .list-item__priority--high {
+  background: rgba(220, 53, 69, 0.22);
+  color: #ff6b7a;
+}
+
+.list-item__priority--medium {
+  background: rgba(255, 193, 7, 0.18);
+  color: #856404;
+}
+
+[data-theme="dark"] .list-item__priority--medium {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+/* Botões de ação do item */
+.list-item__actions {
+  display: none;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.list-item:hover .list-item__actions {
+  display: flex;
+}
+
+.list-item__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.list-item__action-btn:hover {
+  background-color: rgba(150, 51, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.list-item__action-btn--danger:hover {
+  background-color: rgba(255, 92, 19, 0.12);
+  color: var(--color-secondary);
+}
+
+.list-item__action-form {
+  display: contents;
+}
+
+.list-expanded__empty {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  padding: 0.5rem 0;
+}
+
+/* ─── Item em modo de edição inline ────────────────────────────────── */
+.list-item-edit {
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ─── Formulário inline de novo item ────────────────────────────────── */
+.list-expanded__new-form {
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  padding-top: 0.75rem;
+}
+
+.item-new-form__row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item-new-form__title {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.item-new-form__date {
+  width: 9rem;
+  font-size: 0.825rem;
+}
+
+.item-new-form__priority {
+  width: 8rem;
+  font-size: 0.825rem;
+}
+
+.list-expanded__subtitle {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 0.15rem;
+}
+
+/* ─── Paleta de cores — custom properties por cor ───────────────────── */
+/*     Light mode: pastéis suaves                                         */
+/*     Dark mode: fundos escuros saturados + accent vibrante              */
+
+.color--amarelo  { --palette-bg: #FFF9C4; --palette-dark: #F9A825; }
+.color--verde    { --palette-bg: #DCEDC8; --palette-dark: #558B2F; }
+.color--azul     { --palette-bg: #BBDEFB; --palette-dark: #1565C0; }
+.color--rosa     { --palette-bg: #FCE4EC; --palette-dark: #C2185B; }
+.color--laranja  { --palette-bg: #FFE0B2; --palette-dark: #E65100; }
+.color--lilas    { --palette-bg: #E1BEE7; --palette-dark: #7B1FA2; }
+.color--vermelho { --palette-bg: #FFCDD2; --palette-dark: #C62828; }
+.color--menta    { --palette-bg: #B2DFDB; --palette-dark: #00695C; }
+
+[data-theme="dark"] .color--amarelo  { --palette-bg: #1F1A00; --palette-dark: #FDD835; }
+[data-theme="dark"] .color--verde    { --palette-bg: #0A1F07; --palette-dark: #A5D6A7; }
+[data-theme="dark"] .color--azul     { --palette-bg: #051229; --palette-dark: #64B5F6; }
+[data-theme="dark"] .color--rosa     { --palette-bg: #1F0511; --palette-dark: #F48FB1; }
+[data-theme="dark"] .color--laranja  { --palette-bg: #1F0D00; --palette-dark: #FFAB40; }
+[data-theme="dark"] .color--lilas    { --palette-bg: #0D0019; --palette-dark: #CE93D8; }
+[data-theme="dark"] .color--vermelho { --palette-bg: #1F0303; --palette-dark: #EF9A9A; }
+[data-theme="dark"] .color--menta    { --palette-bg: #001810; --palette-dark: #80CBC4; }
+
+/* Aplica as propriedades nos cards e painéis */
+.colored-card {
+  background-color: var(--palette-bg);
+  border-top-color: var(--palette-dark);
+  box-shadow: 0 2px 16px color-mix(in srgb, var(--palette-dark) 20%, transparent);
+}
+
+.list-expanded.colored-card {
+  box-shadow: 0 4px 32px color-mix(in srgb, var(--palette-dark) 20%, transparent);
+}
+
+/* ─── Swatches — sempre mostram a cor pastel como referência visual ──── */
+.color-swatch.color--amarelo  { background-color: #FFF9C4; }
+.color-swatch.color--verde    { background-color: #DCEDC8; }
+.color-swatch.color--azul     { background-color: #BBDEFB; }
+.color-swatch.color--rosa     { background-color: #FCE4EC; }
+.color-swatch.color--laranja  { background-color: #FFE0B2; }
+.color-swatch.color--lilas    { background-color: #E1BEE7; }
+.color-swatch.color--vermelho { background-color: #FFCDD2; }
+.color-swatch.color--menta    { background-color: #B2DFDB; }
+
+/* ─── View Transition — zoom do card ───────────────────────────────── */
+
+/* Sem crossfade do root: sem fundo branco piscando */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* O grupo anima posição e tamanho (o "zoom") */
+::view-transition-group(active-card) {
+  animation-duration: 0.38s;
+  animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Esconde o screenshot do card — sem texto pixelado crescendo */
+::view-transition-old(active-card) {
+  animation: none;
+  opacity: 0;
+}
+
+/* Conteúdo do painel entra em fade limpo enquanto o zoom acontece */
+::view-transition-new(active-card) {
+  animation: vt-fade-in 0.22s ease 0.12s both;
+}
+
+@keyframes vt-fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
