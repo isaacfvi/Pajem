@@ -1,0 +1,45 @@
+<%= turbo_frame_tag dom_id(item) do %>
+  <%
+    overdue = item.due_date.present? && item.due_date < Date.current && !item.completed
+  %>
+  <div class="list-item <%= 'list-item--completed' if item.completed %> <%= 'list-item--overdue' if overdue %>"
+       data-controller="item-toggle">
+    <%= button_to toggle_list_item_path(list, item), method: :patch,
+          form: { class: "list-item__check-form", data: { action: "submit->item-toggle#optimistic" } } do %>
+      <span class="list-item__checkbox <%= 'list-item__checkbox--checked' if item.completed %>"
+            data-item-toggle-target="checkbox">
+        <% if item.completed %>&#10003;<% end %>
+      </span>
+    <% end %>
+
+    <div class="list-item__body">
+      <span class="list-item__title"><%= item.title %></span>
+      <% if item.description.present? %>
+        <p class="list-item__desc"><%= item.description %></p>
+      <% end %>
+      <% if item.due_date.present? || (item.priority.present? && !item.priority_low?) %>
+        <div class="list-item__meta">
+          <% if item.due_date.present? %>
+            <span class="list-item__due <%= 'list-item__due--overdue' if overdue %>">
+              <%= item.due_date.strftime("%d/%m/%Y") %>
+            </span>
+          <% end %>
+          <% if item.priority.present? && !item.priority_low? %>
+            <span class="list-item__priority list-item__priority--<%= item.priority %>">
+              <%= item.priority_high? ? "Alta" : "Média" %>
+            </span>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="list-item__actions">
+      <%= link_to edit_list_item_path(list, item), class: "list-item__action-btn", title: "Editar",
+            data: { turbo_frame: dom_id(item) } do %>&#9998;<% end %>
+      <%= button_to list_item_path(list, item), method: :delete,
+            class: "list-item__action-btn list-item__action-btn--danger",
+            title: "Excluir",
+            form: { class: "list-item__action-form" } do %>&#10005;<% end %>
+    </div>
+  </div>
+<% end %>

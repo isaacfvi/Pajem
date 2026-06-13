@@ -199,26 +199,213 @@
   color: var(--color-text);
 }
 
-.list-item input[type="checkbox"] {
-  accent-color: var(--color-primary);
-  width: 16px;
-  height: 16px;
-  cursor: default;
+.list-item--completed {
+  opacity: 0.6;
+}
+
+.list-item--overdue {
+  border-color: rgba(220, 53, 69, 0.35);
+  background-color: rgba(220, 53, 69, 0.04);
+}
+
+/* Checkbox customizado (via button_to) */
+.list-item__check-form {
+  display: contents;
+}
+
+.list-item__check-form button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
   flex-shrink: 0;
 }
 
-.list-item--completed {
-  opacity: 0.55;
+.list-item__checkbox {
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  border: 2px solid var(--color-border);
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  color: transparent;
+  transition: background 0.1s, border-color 0.1s;
 }
 
-.list-item--completed span {
+.list-item__checkbox--checked {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+
+/* Corpo do item */
+.list-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.list-item__title {
+  font-size: 0.875rem;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item--completed .list-item__title {
   text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.list-item__desc {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.list-item__meta {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-top: 0.1rem;
+}
+
+.list-item__due {
+  font-size: 0.7rem;
+  color: var(--color-text-muted);
+}
+
+.list-item__due--overdue {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.list-item__priority {
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.list-item__priority--high {
+  background: rgba(220, 53, 69, 0.12);
+  color: #c82333;
+}
+
+[data-theme="dark"] .list-item__priority--high {
+  background: rgba(220, 53, 69, 0.22);
+  color: #ff6b7a;
+}
+
+.list-item__priority--medium {
+  background: rgba(255, 193, 7, 0.18);
+  color: #856404;
+}
+
+[data-theme="dark"] .list-item__priority--medium {
+  background: rgba(255, 193, 7, 0.2);
+  color: #ffc107;
+}
+
+/* Botões de ação do item */
+.list-item__actions {
+  display: none;
+  align-items: center;
+  gap: 0.15rem;
+  flex-shrink: 0;
+}
+
+.list-item:hover .list-item__actions {
+  display: flex;
+}
+
+.list-item__action-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.75rem;
+  line-height: 1;
+  text-decoration: none;
+  transition: background-color 0.1s, color 0.1s;
+}
+
+.list-item__action-btn:hover {
+  background-color: rgba(150, 51, 255, 0.1);
+  color: var(--color-primary);
+}
+
+.list-item__action-btn--danger:hover {
+  background-color: rgba(255, 92, 19, 0.12);
+  color: var(--color-secondary);
+}
+
+.list-item__action-form {
+  display: contents;
 }
 
 .list-expanded__empty {
   color: var(--color-text-muted);
   font-size: 0.875rem;
   padding: 0.5rem 0;
+}
+
+/* ─── Item em modo de edição inline ────────────────────────────────── */
+.list-item-edit {
+  padding: 0.6rem 0.75rem;
+  border-radius: 6px;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-primary);
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+/* ─── Formulário inline de novo item ────────────────────────────────── */
+.list-expanded__new-form {
+  border-top: 1px solid rgba(128, 128, 128, 0.2);
+  padding-top: 0.75rem;
+}
+
+.item-new-form__row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.item-new-form__title {
+  flex: 1;
+  min-width: 12rem;
+}
+
+.item-new-form__date {
+  width: 9rem;
+  font-size: 0.825rem;
+}
+
+.item-new-form__priority {
+  width: 8rem;
+  font-size: 0.825rem;
 }
 
 .list-expanded__subtitle {

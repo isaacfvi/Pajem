@@ -52,9 +52,10 @@
   <%# Painéis expandidos — pré-renderizados, ocultos via CSS %>
   <% @lists.each do |list| %>
     <%
-      all_items   = list.items.reject(&:discarded?)
       palette     = List::PALETTE.find { |p| p[:bg] == list.color }
       color_class = palette ? "colored-card #{palette[:css]}" : ""
+      panel_items = list.items.to_a.reject(&:discarded?)
+                        .sort_by { |i| [ i.completed ? 1 : 0, -(Item.priorities[i.priority] || -1), i.created_at.to_f ] }
     %>
     <div class="list-expanded hidden <%= color_class %>"
          data-list-expand-target="panel"
@@ -71,7 +72,6 @@
         </div>
         <div class="list-expanded__header-actions">
           <%= link_to "Editar", edit_list_path(list), class: "btn btn--ghost" %>
-          <a href="#" class="btn btn--primary">+ Novo Item</a>
           <button class="btn btn--ghost" data-action="click->list-expand#collapse">Fechar</button>
         </div>
       </div>
@@ -80,16 +80,17 @@
         <%= render "lists/progress_bar", list: list %>
       </div>
 
-      <div class="list-expanded__items">
-        <% all_items.each do |item| %>
-          <div class="list-item <%= 'list-item--completed' if item.completed %>">
-            <input type="checkbox" <%= "checked" if item.completed %> disabled>
-            <span><%= item.title %></span>
-          </div>
-        <% end %>
-        <% if all_items.empty? %>
+      <div id="list_items_<%= list.id %>" class="list-expanded__items">
+        <% if panel_items.empty? %>
           <p class="list-expanded__empty">Nenhum item nesta lista.</p>
         <% end %>
+        <% panel_items.each do |item| %>
+          <%= render "items/item", item: item, list: list %>
+        <% end %>
+      </div>
+
+      <div id="new_item_form_<%= list.id %>" class="list-expanded__new-form">
+        <%= render "items/new_form", item: Item.new, list: list %>
       </div>
 
     </div>
