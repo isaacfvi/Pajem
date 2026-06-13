@@ -1,27 +1,46 @@
 <% content_for :title, "Redefinir senha — Pajem" %>
 
-<h1>Redefinir senha</h1>
+<div class="auth-page">
+  <div class="auth-card">
+    <h1 class="auth-card__title">Redefinir senha</h1>
 
-<%= form_with model: @user, url: "/password/reset" do |f| %>
-  <% if @user.errors.any? %>
-    <ul>
-      <% @user.errors.full_messages.each do |msg| %>
-        <li><%= msg %></li>
-      <% end %>
-    </ul>
-  <% end %>
+    <%= render "shared/flash" %>
 
-  <%= hidden_field_tag :token, params[:token] %>
+    <% if @user.errors.any? %>
+      <div class="form-error-list">
+        <% @user.errors.full_messages.each do |msg| %>
+          <p class="form-error-list__item">&#x26A0; <%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
 
-  <div>
-    <%= f.label :password, "Nova senha" %>
-    <%= f.password_field :password, autocomplete: "new-password" %>
+    <%= form_with model: @user, url: reset_password_path, method: :patch do |f| %>
+      <%= hidden_field_tag :token, params[:token] %>
+
+      <div class="form-group">
+        <%= f.label :password, "Nova senha", class: "form-label" %>
+        <%= f.password_field :password,
+              class: "form-input #{'form-input--error' if @user.errors[:password].any?}",
+              placeholder: "Mínimo 8 caracteres",
+              autocomplete: "new-password",
+              autofocus: true %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :password_confirmation, "Confirmar nova senha", class: "form-label" %>
+        <%= f.password_field :password_confirmation,
+              class: "form-input #{'form-input--error' if @user.errors[:password_confirmation].any?}",
+              placeholder: "••••••••",
+              autocomplete: "new-password" %>
+      </div>
+
+      <div class="form-actions">
+        <%= f.submit "Redefinir senha", class: "btn btn--primary" %>
+      </div>
+    <% end %>
+
+    <div class="auth-card__footer">
+      <p class="form-link"><%= link_to "← Voltar ao login", login_path %></p>
+    </div>
   </div>
-
-  <div>
-    <%= f.label :password_confirmation, "Confirmar nova senha" %>
-    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
-  </div>
-
-  <%= f.submit "Redefinir senha" %>
-<% end %>
+</div>
