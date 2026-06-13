@@ -6,6 +6,13 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 ---
 
+## [0.1.1](https://github.com/isaacfvi/Pajem/compare/v0.1.0...v0.1.1) (2026-06-13)
+
+
+### Documentação
+
+* corrige formatação do CHANGELOG ([a612ab0](https://github.com/isaacfvi/Pajem/commit/a612ab0a9f9248e82f30416fa7288c3cd10bac1a))
+
 ## [0.1.0](https://github.com/isaacfvi/Pajem/compare/v0.0.1...v0.1.0) (2026-06-13)
 
 ### Adicionado
