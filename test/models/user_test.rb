@@ -36,8 +36,8 @@ class UserTest < ActiveSupport::TestCase
     assert_equal "test@example.com", user.email
   end
 
-  test "invalid with password shorter than 12 characters" do
-    user = User.new(name: "Test", email: "short@example.com", password: "tooshort")
+  test "invalid with password shorter than 8 characters" do
+    user = User.new(name: "Test", email: "short@example.com", password: "abc123")
     assert_not user.valid?
     assert user.errors[:password].any?
   end
