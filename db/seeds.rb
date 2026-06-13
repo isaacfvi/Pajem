@@ -15,7 +15,7 @@ lists_data = [
   { title: "Backlog do Produto",  context: trabalho, color: nil },
   { title: "Compras",             context: casa,     color: "#FFF9C4" },
   { title: "Leituras",            context: pessoal,  color: nil },
-  { title: "Ideias & Inspiração", context: nil,      color: "#FFE0B2" },
+  { title: "Ideias & Inspiração", context: nil,      color: "#FFE0B2" }
 ]
 
 lists_data.each do |attrs|
