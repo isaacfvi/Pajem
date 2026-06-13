@@ -6,6 +6,13 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 ---
 
+## [0.2.0](https://github.com/isaacfvi/Pajem/compare/v0.1.1...v0.2.0) (2026-06-13)
+
+
+### Adicionado
+
+* contextos, listas e itens (US-04, US-05, US-06, US-07, US-08) ([3f7aca1](https://github.com/isaacfvi/Pajem/commit/3f7aca1268da14f810c30b8881298ce9b073bbdb))
+
 ## [0.1.1](https://github.com/isaacfvi/Pajem/compare/v0.1.0...v0.1.1) (2026-06-13)
 
 
