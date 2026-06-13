@@ -50,7 +50,7 @@ CREATE TABLE public.audit_logs (
     auditable_id bigint NOT NULL,
     action character varying(50) NOT NULL,
     origin character varying(20) DEFAULT 'manual'::character varying NOT NULL,
-    changes jsonb,
+    changeset jsonb,
     created_at timestamp(6) without time zone NOT NULL
 );
 
@@ -577,6 +577,7 @@ ALTER TABLE ONLY public.lists
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260613000008'),
 ('20260613000007'),
 ('20260613000006'),
 ('20260613000005'),
