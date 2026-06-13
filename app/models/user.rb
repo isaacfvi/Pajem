@@ -13,7 +13,7 @@ class User < ApplicationRecord
   validates :email, presence: true,
                     format: { with: URI::MailTo::EMAIL_REGEXP },
                     uniqueness: { case_sensitive: false }
-  validates :password, length: { minimum: 12 }, allow_nil: true
+  validates :password, length: { minimum: 8 }, allow_nil: true
 
   before_save { self.email = email.downcase }
 
