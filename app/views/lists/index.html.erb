@@ -1,0 +1,83 @@
+<% content_for :page_title, "Todas as listas" %>
+
+<div data-controller="list-expand">
+  <%# Grid de post-its %>
+  <div class="postit-grid" data-list-expand-target="grid">
+    <% @lists.each do |list| %>
+      <%
+        all_items   = list.items.reject(&:discarded?)
+        pending     = all_items.reject(&:completed).count
+        completed   = all_items.count(&:completed)
+        total       = all_items.count
+        progress    = total.zero? ? 0 : (completed.to_f / total * 100).round
+        bg_style    = list.color.present? ? "background-color: #{list.color};" : nil
+      %>
+      <div class="postit"
+           data-action="click->list-expand#expand"
+           data-list-expand-list-id-param="<%= list.id %>"
+           <%= "style=\"#{bg_style}\"" if bg_style %>>
+        <div class="postit__header">
+          <span class="postit__title"><%= list.title %></span>
+          <button class="postit__menu-btn"
+                  data-action="click->list-expand#noop:stop"
+                  aria-label="Opções">&#8943;</button>
+        </div>
+        <div class="postit__meta">
+          <%= pending == 1 ? "1 item pendente" : "#{pending} itens pendentes" %>
+        </div>
+        <div class="postit__progress-bar">
+          <div class="postit__progress-fill" style="width: <%= progress %>%"></div>
+        </div>
+      </div>
+    <% end %>
+
+    <% if @lists.empty? %>
+      <div class="postit postit--empty">
+        <p>Nenhuma lista ainda. Crie sua primeira lista!</p>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Painéis expandidos — pré-renderizados, ocultos via CSS %>
+  <% @lists.each do |list| %>
+    <%
+      all_items = list.items.reject(&:discarded?)
+      total     = all_items.count
+      completed = all_items.count(&:completed)
+      progress  = total.zero? ? 0 : (completed.to_f / total * 100).round
+    %>
+    <div class="list-expanded hidden"
+         data-list-expand-target="panel"
+         data-list-id="<%= list.id %>">
+      <div class="list-expanded__header">
+        <div>
+          <h2 class="list-expanded__title"><%= list.title %></h2>
+          <% if list.context %>
+            <p class="list-expanded__description"><%= list.context.name %></p>
+          <% end %>
+        </div>
+        <div class="list-expanded__header-actions">
+          <a href="#" class="btn btn--primary">+ Novo Item</a>
+          <button class="btn btn--ghost"
+                  data-action="click->list-expand#collapse">Fechar</button>
+        </div>
+      </div>
+
+      <div class="postit__progress-bar">
+        <div class="postit__progress-fill" style="width: <%= progress %>%"></div>
+      </div>
+
+      <div class="list-expanded__items">
+        <% all_items.each do |item| %>
+          <div class="list-item <%= 'list-item--completed' if item.completed %>">
+            <input type="checkbox" <%= "checked" if item.completed %> disabled>
+            <span><%= item.title %></span>
+          </div>
+        <% end %>
+        <% if all_items.empty? %>
+          <p class="list-expanded__empty">Nenhum item nesta lista.</p>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

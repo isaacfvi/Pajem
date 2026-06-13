@@ -11,25 +11,82 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <link rel="icon" href="/icon.png" type="image/png">
     <link rel="icon" href="/icon.svg" type="image/svg+xml">
     <link rel="apple-touch-icon" href="/icon.png">
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%# Script inline antes do CSS para evitar flash de tema errado no reload %>
+    <script>
+      if (localStorage.getItem('theme') === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    </script>
+
+    <%= stylesheet_link_tag "application",
+                            "layout/topbar",
+                            "layout/sidebar",
+                            "layout/content",
+                            "layout/postit",
+                            "layout/pajem_widget",
+                            "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
 
   <body>
-    <% if notice %>
-      <p role="status"><%= notice %></p>
+    <% if user_signed_in? %>
+      <%= render "shared/topbar" %>
+
+      <div class="app-shell">
+        <%= render "shared/sidebar" %>
+
+        <main class="content-area">
+          <%= render "shared/flash" %>
+
+          <div class="content-header">
+            <h1 class="content-header__title">
+              <%= content_for?(:page_title) ? yield(:page_title) : "Pajem" %>
+            </h1>
+            <div class="content-header__actions">
+              <a href="#" class="btn btn--primary">+ Nova Lista</a>
+            </div>
+          </div>
+
+          <%= yield %>
+        </main>
+      </div>
+
+      <div class="pajem-widget" data-controller="pajem-chat">
+        <div class="pajem-chat" data-pajem-chat-target="panel" hidden>
+          <div class="pajem-chat__header">
+            <div class="pajem-chat__header-avatar-placeholder">P</div>
+            <span class="pajem-chat__header-name">Pajem</span>
+            <button class="pajem-chat__close"
+                    data-action="click->pajem-chat#close"
+                    aria-label="Fechar chat">&#x2715;</button>
+          </div>
+          <div class="pajem-chat__messages">
+            <p class="pajem-chat__welcome">Olá! Como posso ajudar?</p>
+          </div>
+          <div class="pajem-chat__footer">
+            <input type="text"
+                   class="pajem-chat__input"
+                   placeholder="Digite um comando..."
+                   aria-label="Mensagem para o Pajem">
+            <button class="pajem-chat__send">Enviar</button>
+          </div>
+        </div>
+
+        <button class="pajem-widget__btn"
+                data-action="click->pajem-chat#toggle"
+                data-pajem-chat-target="btn"
+                aria-label="Abrir assistente Pajem">
+          <div class="pajem-widget__avatar-placeholder">P</div>
+        </button>
+      </div>
+    <% else %>
+      <%= yield %>
     <% end %>
-    <% if alert %>
-      <p role="alert"><%= alert %></p>
-    <% end %>
-    <%= yield %>
   </body>
 </html>

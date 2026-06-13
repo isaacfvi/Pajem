@@ -1,0 +1,19 @@
+<div class="flash-messages">
+  <% if notice %>
+    <div class="flash-message flash-message--notice" data-controller="flash">
+      <span class="flash-message__text"><%= notice %></span>
+      <button class="flash-message__close"
+              data-action="click->flash#dismiss"
+              aria-label="Fechar">&#x2715;</button>
+    </div>
+  <% end %>
+
+  <% if alert %>
+    <div class="flash-message flash-message--alert" data-controller="flash">
+      <span class="flash-message__text"><%= alert %></span>
+      <button class="flash-message__close"
+              data-action="click->flash#dismiss"
+              aria-label="Fechar">&#x2715;</button>
+    </div>
+  <% end %>
+</div>

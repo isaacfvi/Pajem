@@ -3,6 +3,7 @@ class ApplicationController < ActionController::Base
   stale_when_importmap_changes
 
   before_action :require_login
+  before_action :load_sidebar_data, if: :user_signed_in?
 
   helper_method :current_user, :user_signed_in?
 
@@ -25,5 +26,9 @@ class ApplicationController < ActionController::Base
 
   def require_no_login
     redirect_to root_path if user_signed_in?
+  end
+
+  def load_sidebar_data
+    @sidebar_contexts = current_user.contexts.order(:name)
   end
 end

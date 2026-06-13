@@ -1,0 +1,94 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: var(--color-topbar);
+  color: var(--color-topbar-text);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.topbar__brand {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-topbar-text);
+  text-decoration: none;
+  letter-spacing: 0.03em;
+}
+
+.topbar__brand:hover {
+  color: var(--color-topbar-text);
+  opacity: 0.85;
+}
+
+.topbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.topbar__theme-btn {
+  background: transparent;
+  border: none;
+  color: var(--color-topbar-text);
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0.25rem 0.4rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: opacity 0.15s;
+}
+
+.topbar__theme-btn:hover {
+  opacity: 0.75;
+}
+
+.topbar__user {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-topbar-text);
+  text-decoration: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.topbar__user:hover {
+  color: var(--color-topbar-text);
+  opacity: 0.85;
+}
+
+.topbar__logout-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  color: var(--color-topbar-text);
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.topbar__logout-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.topbar__avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--color-primary-dark);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  border: 2px solid var(--color-secondary);
+  flex-shrink: 0;
+}

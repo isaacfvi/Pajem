@@ -1,0 +1,38 @@
+<nav class="sidebar" aria-label="Navegação principal">
+  <a href="#" class="sidebar__link">
+    <span class="sidebar__link-icon">&#9706;</span>
+    Dashboard
+  </a>
+
+  <div class="sidebar__divider"></div>
+
+  <p class="sidebar__section-label">Listas</p>
+
+  <a href="<%= root_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == root_path %>">
+    <span class="sidebar__link-icon">&#9776;</span>
+    Todas as listas
+  </a>
+
+  <a href="#" class="sidebar__action">+ Nova Lista</a>
+
+  <div class="sidebar__divider"></div>
+
+  <p class="sidebar__section-label">Contextos</p>
+
+  <% @sidebar_contexts.each do |context| %>
+    <a href="#" class="sidebar__link">
+      <span class="sidebar__link-icon">&#9670;</span>
+      <%= context.name %>
+    </a>
+  <% end %>
+
+  <a href="#" class="sidebar__action">+ Novo Contexto</a>
+
+  <div class="sidebar__divider"></div>
+
+  <a href="#" class="sidebar__link">
+    <span class="sidebar__link-icon">&#128465;</span>
+    Lixeira
+  </a>
+</nav>

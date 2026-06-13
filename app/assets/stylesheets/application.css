@@ -1,10 +1,297 @@
 /*
- * This is a manifest file that'll be compiled into application.css.
- *
- * With Propshaft, assets are served efficiently without preprocessing steps. You can still include
- * application-wide styles in this file, but keep in mind that CSS precedence will follow the standard
- * cascading order, meaning styles declared later in the document or manifest will override earlier ones,
- * depending on specificity.
- *
- * Consider organizing styles into separate files for maintainability.
+ * CSS Global — variáveis, reset e utilitários
  */
+
+/* ─── Paleta modo claro ─────────────────────────────────────────────── */
+:root {
+  --color-primary:         #9633FF;
+  --color-primary-light:   #B86AFF;
+  --color-primary-dark:    #6B1FCC;
+  --color-secondary:       #FF5C13;
+  --color-secondary-light: #FF8A50;
+  --color-bg:              #FFFFFF;
+  --color-bg-surface:      #F5F0FF;
+  --color-bg-sidebar:      #F0E8FF;
+  --color-text:            #1A1A2E;
+  --color-text-muted:      #6B6B8A;
+  --color-border:          #DDD0FF;
+  --color-topbar:          #9633FF;
+  --color-topbar-text:     #FFFFFF;
+  --sidebar-width: 220px;
+}
+
+/* ─── Paleta modo escuro ────────────────────────────────────────────── */
+[data-theme="dark"] {
+  --color-primary:         #B86AFF;
+  --color-primary-light:   #CFA0FF;
+  --color-primary-dark:    #9633FF;
+  --color-secondary:       #FF7A3D;
+  --color-secondary-light: #FFA070;
+  --color-bg:              #0F0F1A;
+  --color-bg-surface:      #1A1A2E;
+  --color-bg-sidebar:      #16162A;
+  --color-text:            #F0E8FF;
+  --color-text-muted:      #9E8EBB;
+  --color-border:          #2E2E4E;
+  --color-topbar:          #16162A;
+  --color-topbar-text:     #F0E8FF;
+}
+
+/* ─── Reset ─────────────────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--color-primary-light);
+}
+
+/* ─── Utilitários ───────────────────────────────────────────────────── */
+.hidden {
+  display: none !important;
+}
+
+/* ─── Botões ────────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.15s, opacity 0.15s;
+}
+
+.btn--primary {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
+
+.btn--primary:hover {
+  background-color: var(--color-secondary-light);
+  color: #fff;
+}
+
+.btn--ghost {
+  background-color: transparent;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+}
+
+.btn--ghost:hover {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text);
+}
+
+/* ─── Flash messages ────────────────────────────────────────────────── */
+.flash-messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.flash-message {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  animation: flash-in 0.2s ease;
+}
+
+@keyframes flash-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.flash-message--notice {
+  background-color: #e8f5e9;
+  color: #1b5e20;
+  border-left: 4px solid #4caf50;
+}
+
+[data-theme="dark"] .flash-message--notice {
+  background-color: #1b2e1f;
+  color: #a5d6a7;
+  border-left-color: #4caf50;
+}
+
+.flash-message--alert {
+  background-color: #fff3e0;
+  color: #e65100;
+  border-left: 4px solid var(--color-secondary);
+}
+
+[data-theme="dark"] .flash-message--alert {
+  background-color: #2a1a0d;
+  color: #ffb74d;
+  border-left-color: var(--color-secondary);
+}
+
+.flash-message__text {
+  flex: 1;
+}
+
+.flash-message__close {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.6;
+  font-size: 1rem;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.12s;
+  flex-shrink: 0;
+  color: inherit;
+}
+
+.flash-message__close:hover {
+  opacity: 1;
+}
+
+/* ─── Formulários (auth pages) ──────────────────────────────────────── */
+.auth-page {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  background-color: var(--color-bg-surface);
+}
+
+.auth-card {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 24px rgba(150, 51, 255, 0.08);
+}
+
+.auth-card__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: var(--color-text);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.form-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.form-input {
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-size: 0.875rem;
+  outline: none;
+  transition: border-color 0.12s, box-shadow 0.12s;
+}
+
+.form-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(150, 51, 255, 0.15);
+}
+
+.form-error {
+  font-size: 0.75rem;
+  color: var(--color-secondary);
+}
+
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.form-link {
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--color-text-muted);
+}
+
+.auth-card__subtitle {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+  margin-top: -0.75rem;
+}
+
+.form-input--error {
+  border-color: var(--color-secondary);
+}
+
+.form-input--error:focus {
+  border-color: var(--color-secondary);
+  box-shadow: 0 0 0 3px rgba(255, 92, 19, 0.15);
+}
+
+.form-error-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background-color: #fff3e0;
+  border-left: 4px solid var(--color-secondary);
+  border-radius: 6px;
+}
+
+[data-theme="dark"] .form-error-list {
+  background-color: #2a1a0d;
+}
+
+.form-error-list__item {
+  font-size: 0.8rem;
+  color: var(--color-secondary);
+}
+
+.auth-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+}
+
+.form-actions .btn {
+  width: 100%;
+  justify-content: center;
+}
