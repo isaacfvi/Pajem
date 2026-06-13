@@ -26,7 +26,7 @@ class AuditLogTest < ActiveSupport::TestCase
   end
 
   test "AuditLog.record stores changeset column" do
-    log = AuditLog.record(user: @user, action: "updated", auditable: @list, changes: { "title" => ["old", "new"] })
+    log = AuditLog.record(user: @user, action: "updated", auditable: @list, changes: { "title" => [ "old", "new" ] })
     log.reload
     assert_equal ["old", "new"], log.changeset["title"]
   end

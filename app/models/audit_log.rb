@@ -1,6 +1,6 @@
 class AuditLog < ApplicationRecord
-  VALID_ACTIONS = %w[created updated deleted restored completed uncompleted shared unshared].freeze
-  VALID_ORIGINS = %w[manual assistant].freeze
+  VALID_ACTIONS = %w[ created updated deleted restored completed uncompleted shared unshared ].freeze
+  VALID_ORIGINS = %w[ manual assistant ].freeze
 
   belongs_to :user, optional: true
   belongs_to :auditable, polymorphic: true
