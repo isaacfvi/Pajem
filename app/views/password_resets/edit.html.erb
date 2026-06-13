@@ -1,0 +1,27 @@
+<% content_for :title, "Redefinir senha — Pajem" %>
+
+<h1>Redefinir senha</h1>
+
+<%= form_with model: @user, url: "/password/reset" do |f| %>
+  <% if @user.errors.any? %>
+    <ul>
+      <% @user.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= hidden_field_tag :token, params[:token] %>
+
+  <div>
+    <%= f.label :password, "Nova senha" %>
+    <%= f.password_field :password, autocomplete: "new-password" %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation, "Confirmar nova senha" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
+  </div>
+
+  <%= f.submit "Redefinir senha" %>
+<% end %>
