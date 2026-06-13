@@ -23,5 +23,9 @@ module Pajem
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Generate structure.sql instead of schema.rb to preserve GIN indexes and other
+    # PostgreSQL-specific DDL that Active Record's schema dumper cannot express.
+    config.active_record.schema_format = :sql
   end
 end

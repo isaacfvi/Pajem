@@ -1,0 +1,11 @@
+Reativação de conta — Pajem
+
+Olá, <%= @user.name %>.
+
+Sua conta no Pajem está desativada. Acesse o link abaixo para reativá-la:
+
+<%= reactivate_account_url(@user.reset_password_token) %>
+
+Se você não solicitou a reativação, ignore este e-mail.
+
+— O Pajem
