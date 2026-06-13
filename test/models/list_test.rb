@@ -28,25 +28,22 @@ class ListTest < ActiveSupport::TestCase
     assert list.errors[:title].any?
   end
 
-  test "color must be a valid hex code" do
-    list = List.new(title: "My List", user: @user, color: "red")
-    assert_not list.valid?
-    assert list.errors[:color].any?
-  end
-
   test "color can be nil" do
     list = List.new(title: "My List", user: @user, color: nil)
     assert list.valid?
   end
 
-  test "color accepts valid lowercase hex code" do
-    list = List.new(title: "My List", user: @user, color: "#ff5733")
-    assert list.valid?
+  test "color accepts cores da paleta" do
+    List::PALETTE.each do |entry|
+      list = List.new(title: "My List", user: @user, color: entry[:bg])
+      assert list.valid?, "#{entry[:name]} (#{entry[:bg]}) deveria ser válida"
+    end
   end
 
-  test "color accepts valid uppercase hex code" do
+  test "color rejeita cores fora da paleta" do
     list = List.new(title: "My List", user: @user, color: "#FF5733")
-    assert list.valid?
+    assert_not list.valid?
+    assert list.errors[:color].any?
   end
 
   test "#progress returns 0 when no items" do

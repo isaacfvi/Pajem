@@ -1,0 +1,7 @@
+<% content_for :page_title, "Novo Contexto" %>
+
+<%= render "form",
+      context: @context,
+      url: contexts_path,
+      title: "Novo Contexto",
+      submit_label: "Criar contexto" %>

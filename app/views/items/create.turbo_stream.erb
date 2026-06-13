@@ -1,0 +1,10 @@
+<%= turbo_stream.prepend "list_items_#{@list.id}", partial: "items/item", locals: { item: @item, list: @list } %>
+<%= turbo_stream.update dom_id(@list, :progress) do %>
+  <%= render "lists/progress_bar", list: @list %>
+<% end %>
+<%= turbo_stream.update "#{dom_id(@list, :progress)}_panel" do %>
+  <%= render "lists/progress_bar", list: @list %>
+<% end %>
+<%= turbo_stream.update "new_item_form_#{@list.id}" do %>
+  <%= render "items/new_form", item: Item.new, list: @list %>
+<% end %>

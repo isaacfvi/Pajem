@@ -1,0 +1,31 @@
+<%= turbo_frame_tag dom_id(@item) do %>
+  <div class="list-item-edit">
+    <%= form_with model: [ @list, @item ] do |f| %>
+      <% if @item.errors.any? %>
+        <div class="form-error-list">
+          <% @item.errors.full_messages.each do |msg| %>
+            <span class="form-error-list__item">&#9679; <%= msg %></span>
+          <% end %>
+        </div>
+      <% end %>
+      <div class="item-new-form__row">
+        <%= f.text_field :title,
+              class: "form-input item-new-form__title #{'form-input--error' if @item.errors[:title].any?}",
+              autocomplete: "off" %>
+        <%= f.date_field :due_date, class: "form-input item-new-form__date" %>
+        <%= f.select :priority,
+              [["Baixa", "low"], ["Média", "medium"], ["Alta", "high"]],
+              { include_blank: "Prioridade" },
+              class: "form-input form-select item-new-form__priority" %>
+        <%= f.submit "Salvar", class: "btn btn--primary btn--sm" %>
+        <%= link_to "✕", list_item_path(@list, @item),
+              class: "btn btn--ghost btn--sm",
+              data: { turbo_frame: dom_id(@item) } %>
+      </div>
+      <div class="item-new-form__row">
+        <%= f.text_area :description, class: "form-input item-new-form__title",
+              placeholder: "Descrição…", rows: 2 %>
+      </div>
+    <% end %>
+  </div>
+<% end %>

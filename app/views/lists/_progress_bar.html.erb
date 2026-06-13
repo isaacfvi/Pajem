@@ -1,0 +1,9 @@
+<%
+  kept_items = list.items.reject(&:discarded?)
+  total      = kept_items.count
+  completed  = kept_items.count(&:completed)
+  pct        = total.zero? ? 0 : (completed.to_f / total * 100).round
+%>
+<div class="postit__progress-bar">
+  <div class="postit__progress-fill" style="width: <%= pct %>%"></div>
+</div>

@@ -1,0 +1,55 @@
+<div class="inner-card">
+  <h2 class="inner-card__title"><%= title %></h2>
+
+  <%= form_with model: list, url: url do |f| %>
+    <% if list.errors.any? %>
+      <div class="form-error-list">
+        <% list.errors.full_messages.each do |msg| %>
+          <span class="form-error-list__item">&#9679; <%= msg %></span>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="form-group">
+      <%= f.label :title, "Título", class: "form-label" %>
+      <%= f.text_field :title, class: "form-input #{'form-input--error' if list.errors[:title].any?}",
+            placeholder: "Nome da lista", autocomplete: "off" %>
+      <% if list.errors[:title].any? %>
+        <span class="form-error"><%= list.errors[:title].first %></span>
+      <% end %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description, "Descrição", class: "form-label" %>
+      <%= f.text_area :description, class: "form-input form-textarea",
+            placeholder: "Descrição opcional…", rows: 3 %>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Cor</label>
+      <div class="color-swatches">
+        <label class="color-swatch color-swatch--none" title="Sem cor">
+          <%= f.radio_button :color, "", class: "color-swatch__input" %>
+          <span>—</span>
+        </label>
+        <% List::PALETTE.each do |entry| %>
+          <label class="color-swatch <%= entry[:css] %>" title="<%= entry[:name] %>">
+            <%= f.radio_button :color, entry[:bg], class: "color-swatch__input" %>
+          </label>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :context_id, "Workspace", class: "form-label" %>
+      <%= f.collection_select :context_id, @sidebar_contexts, :id, :name,
+            { include_blank: "Sem workspace" },
+            { class: "form-input form-select" } %>
+    </div>
+
+    <div class="form-actions">
+      <%= f.submit submit_label, class: "btn btn--primary" %>
+      <%= link_to "Cancelar", lists_path, class: "btn btn--ghost" %>
+    </div>
+  <% end %>
+</div>
