@@ -1,0 +1,7 @@
+<% content_for :page_title, "Editar Contexto" %>
+
+<%= render "form",
+      context: @context,
+      url: context_path(@context),
+      title: "Editar \"#{@context.name}\"",
+      submit_label: "Salvar alterações" %>

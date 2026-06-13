@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   get    "/password/reset",    to: "password_resets#edit",  as: :reset_password
   patch  "/password/reset",    to: "password_resets#update"
 
+  resources :contexts, path: "/contextos", only: [ :new, :create, :edit, :update, :destroy ]
   resources :lists, only: [ :index ]
 
   root to: "lists#index"

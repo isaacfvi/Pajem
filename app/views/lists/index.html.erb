@@ -1,4 +1,4 @@
-<% content_for :page_title, "Todas as listas" %>
+<% content_for :page_title, @active_context&.name || "Todas as listas" %>
 
 <div data-controller="list-expand">
   <%# Grid de post-its %>
