@@ -2,6 +2,7 @@
   flex: 1;
   background-color: var(--color-bg);
   padding: 1.5rem;
+  padding-bottom: calc(1.5rem + 5rem);
   overflow-y: auto;
   min-height: 0;
   display: flex;

@@ -1,0 +1,11 @@
+<%= turbo_stream.append "pajem-messages" do %>
+  <div class="pajem-chat__message pajem-chat__message--user">
+    <%= @user_message_content %>
+  </div>
+<% end %>
+
+<%= turbo_stream.append "pajem-messages" do %>
+  <div class="pajem-chat__message pajem-chat__message--assistant<%= " pajem-chat__message--error" if @error_message %>">
+    <%= @error_message || @assistant_message&.content %>
+  </div>
+<% end %>

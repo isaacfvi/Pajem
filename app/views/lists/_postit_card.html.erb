@@ -1,0 +1,26 @@
+<%
+  pending     = list.items.kept.where(completed: false).count
+  palette     = List::PALETTE.find { |p| p[:bg] == list.color }
+  color_class = palette ? "colored-card #{palette[:css]}" : ""
+%>
+<div id="<%= dom_id(list) %>"
+     class="postit <%= color_class %>"
+     data-action="click->list-expand#expand"
+     data-list-expand-list-id-param="<%= list.id %>">
+  <div class="postit__header">
+    <span class="postit__title"><%= list.title %></span>
+    <div class="postit__actions" data-action="click->list-expand#noop:stop">
+      <%= link_to edit_list_path(list), class: "postit__action-btn", title: "Editar lista" do %>&#9998;<% end %>
+      <%= button_to list_path(list), method: :delete,
+            class: "postit__action-btn postit__action-btn--danger",
+            title: "Excluir lista",
+            form: { class: "postit__action-form" } do %>&#10005;<% end %>
+    </div>
+  </div>
+  <div class="postit__meta">
+    <%= pending == 1 ? "1 item pendente" : "#{pending} itens pendentes" %>
+  </div>
+  <div id="<%= dom_id(list, :progress) %>">
+    <%= render "lists/progress_bar", list: list %>
+  </div>
+</div>

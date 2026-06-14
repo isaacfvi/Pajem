@@ -37,24 +37,18 @@
   box-shadow: 0 6px 24px rgba(255, 92, 19, 0.5);
 }
 
-.pajem-widget__avatar-placeholder {
+.pajem-widget__avatar {
   width: clamp(52px, 7vw, 68px);
   height: clamp(52px, 7vw, 68px);
   border-radius: 50%;
   border: 3px solid var(--color-secondary);
   box-shadow: 0 4px 16px rgba(255, 92, 19, 0.35);
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-dark));
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #fff;
+  object-fit: cover;
+  display: block;
   transition: transform 0.15s, box-shadow 0.15s;
-  user-select: none;
 }
 
-.pajem-widget__btn:hover .pajem-widget__avatar-placeholder {
+.pajem-widget__btn:hover .pajem-widget__avatar {
   transform: scale(1.08);
   box-shadow: 0 6px 24px rgba(255, 92, 19, 0.5);
 }
@@ -70,10 +64,18 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transform-origin: bottom right;
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .pajem-chat[hidden] {
   display: none !important;
+}
+
+.pajem-chat[data-closing] {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
 }
 
 .pajem-chat__header {
@@ -158,6 +160,12 @@
   flex-shrink: 0;
 }
 
+.pajem-chat__footer form {
+  display: flex;
+  flex: 1;
+  gap: 0.5rem;
+}
+
 .pajem-chat__input {
   flex: 1;
   padding: 0.5rem 0.75rem;
@@ -215,4 +223,45 @@
 @keyframes pajem-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
+}
+
+/* ─── Bolhas de mensagem ────────────────────────────────────────────── */
+.pajem-chat__message {
+  max-width: 85%;
+  padding: 0.5rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  word-break: break-word;
+}
+
+.pajem-chat__message--user {
+  align-self: flex-end;
+  background-color: var(--color-primary);
+  color: #fff;
+  border-bottom-right-radius: 3px;
+}
+
+.pajem-chat__message--assistant {
+  align-self: flex-start;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-bottom-left-radius: 3px;
+}
+
+.pajem-chat__message--error {
+  background-color: #fff3e0;
+  border-color: var(--color-secondary);
+  color: var(--color-secondary);
+}
+
+[data-theme="dark"] .pajem-chat__message--error {
+  background-color: #2a1a0d;
+  color: var(--color-secondary-light);
+}
+
+.pajem-chat__message--thinking {
+  opacity: 0.65;
+  font-style: italic;
 }
