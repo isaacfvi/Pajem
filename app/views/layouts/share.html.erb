@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title).presence || "Lista compartilhada — Pajem" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+
+    <%= stylesheet_link_tag "application", "layout/share", "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="share-page">
+    <header class="share-header">
+      <a href="/" class="share-header__brand">
+        <img src="/LOGO.png" alt="Pajem" class="share-header__logo">
+        Pajem
+      </a>
+    </header>
+
+    <main class="share-content">
+      <%= yield %>
+    </main>
+  </body>
+</html>

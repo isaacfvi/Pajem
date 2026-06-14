@@ -167,6 +167,66 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
     assert_not bob_list.reload.discarded?
   end
 
+  # ─── PATCH /listas/:id/compartilhar ──────────────────────────────
+
+  test "PATCH compartilhar ativa o compartilhamento e gera token" do
+    patch compartilhar_list_path(@list)
+    @list.reload
+    assert @list.share_enabled?
+    assert @list.share_token.present?
+  end
+
+  test "PATCH compartilhar desativa quando já está ativo" do
+    @list.update!(share_enabled: true, share_token: "abc")
+    patch compartilhar_list_path(@list)
+    assert_not @list.reload.share_enabled?
+  end
+
+  test "PATCH compartilhar registra audit log" do
+    assert_difference "AuditLog.count" do
+      patch compartilhar_list_path(@list)
+    end
+    log = AuditLog.last
+    assert_equal "shared", log.action
+    assert_equal @list, log.auditable
+  end
+
+  test "PATCH compartilhar registra audit log de unshared ao desativar" do
+    @list.update!(share_enabled: true, share_token: "abc")
+    patch compartilhar_list_path(@list)
+    assert_equal "unshared", AuditLog.last.action
+  end
+
+  test "PATCH compartilhar retorna 404 para lista de outro usuário" do
+    bob_list = @bob.lists.create!(title: "Bob Share")
+    patch compartilhar_list_path(bob_list)
+    assert_response :not_found
+  end
+
+  # ─── PATCH /listas/:id/revogar_link ──────────────────────────────
+
+  test "PATCH revogar_link gera novo token mantendo link ativo" do
+    @list.update!(share_enabled: true, share_token: "token-antigo")
+    patch revogar_link_list_path(@list)
+    @list.reload
+    assert @list.share_enabled?
+    assert_not_equal "token-antigo", @list.share_token
+  end
+
+  test "PATCH revogar_link registra audit log de shared" do
+    @list.update!(share_enabled: true, share_token: "tok")
+    assert_difference "AuditLog.count" do
+      patch revogar_link_list_path(@list)
+    end
+    assert_equal "shared", AuditLog.last.action
+  end
+
+  test "PATCH revogar_link retorna 404 para lista de outro usuário" do
+    bob_list = @bob.lists.create!(title: "Bob Revoke", share_enabled: true, share_token: "x")
+    patch revogar_link_list_path(bob_list)
+    assert_response :not_found
+  end
+
   private
 
   def login_as(user)
