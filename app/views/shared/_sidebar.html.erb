@@ -59,7 +59,8 @@
 
   <div class="sidebar__divider"></div>
 
-  <a href="#" class="sidebar__link">
+  <a href="<%= trash_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == trash_path %>">
     <span class="sidebar__link-icon">&#128465;</span>
     Lixeira
   </a>

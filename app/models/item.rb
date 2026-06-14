@@ -47,7 +47,8 @@ class Item < ApplicationRecord
   end
 
   def broadcast_progress_bars
-    fresh_list = list.reload
+    fresh_list = List.unscoped.find_by(id: list_id)
+    return unless fresh_list&.kept?
     broadcast_replace_to fresh_list,
       target:  dom_id(fresh_list),
       partial: "lists/postit_card",

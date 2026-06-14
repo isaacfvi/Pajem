@@ -1,0 +1,153 @@
+/* ─── Lixeira vazia (total) ──────────────────────────────────────── */
+.trash-all-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  padding: 4rem 1rem;
+  color: var(--color-text-muted);
+}
+
+.trash-all-empty__icon {
+  font-size: 3rem;
+  opacity: 0.4;
+}
+
+.trash-all-empty__text {
+  font-size: 1rem;
+}
+
+/* ─── Seção (listas / itens) ─────────────────────────────────────── */
+.trash-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.trash-section__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.trash-section__count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-muted);
+  border-radius: 20px;
+  padding: 0.1rem 0.55rem;
+}
+
+.trash-empty-inline {
+  color: var(--color-text-muted);
+  font-size: 0.875rem;
+  padding: 1rem 0;
+}
+
+/* ─── Lista de entradas ──────────────────────────────────────────── */
+.trash-list {
+  list-style: none;
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ─── Entrada individual ─────────────────────────────────────────── */
+.trash-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  transition: background-color 0.1s;
+}
+
+.trash-entry:last-child {
+  border-bottom: none;
+}
+
+.trash-entry:hover {
+  background-color: var(--color-bg-surface);
+}
+
+/* ─── Indicador de cor ───────────────────────────────────────────── */
+.trash-entry__color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  background-color: var(--color-border);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.trash-entry__color-dot--item {
+  background-color: transparent;
+  border: 2px solid var(--color-border);
+}
+
+/* ─── Info (título + meta) ───────────────────────────────────────── */
+.trash-entry__info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.trash-entry__title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.trash-entry__meta {
+  font-size: 0.775rem;
+  color: var(--color-text-muted);
+}
+
+.trash-entry__parent-warning {
+  color: var(--color-secondary);
+  font-weight: 600;
+}
+
+/* ─── Ações ──────────────────────────────────────────────────────── */
+.trash-entry__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.trash-entry__actions .button_to,
+.trash-entry__actions form {
+  display: contents;
+}
+
+.trash-entry__destroy-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+
+.trash-entry__destroy-btn:hover {
+  background-color: var(--color-secondary);
+  color: #fff;
+}
