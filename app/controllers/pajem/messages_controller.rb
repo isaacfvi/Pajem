@@ -58,6 +58,5 @@ module Pajem
         "Pedido do usuário: #{message_text}\nAções realizadas:\n" + relevant.map { |r| "- #{r[:message]}" }.join("\n")
       end
     end
-
   end
 end
