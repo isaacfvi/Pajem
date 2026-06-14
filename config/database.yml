@@ -14,3 +14,15 @@ test:
 production:
   <<: *default
   url: <%= ENV["DATABASE_URL"] %>
+  queue:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    migrations_paths: db/queue_migrate
+  cache:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    migrations_paths: db/cache_migrate
+  cable:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
+    migrations_paths: db/cable_migrate
