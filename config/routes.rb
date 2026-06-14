@@ -19,7 +19,7 @@ Rails.application.routes.draw do
       patch :compartilhar
       patch :revogar_link
     end
-    resources :items, path: "/itens", only: [ :show, :create, :edit, :update, :destroy ] do
+    resources :items, path: "/itens", only: [ :index, :show, :create, :edit, :update, :destroy ] do
       member do
         patch :toggle
       end

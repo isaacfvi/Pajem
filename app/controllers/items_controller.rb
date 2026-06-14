@@ -2,6 +2,28 @@ class ItemsController < ApplicationController
   before_action :set_list
   before_action :set_item, only: [ :show, :edit, :update, :destroy, :toggle ]
 
+  def index
+    scope = @list.items.kept
+    scope = scope.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+
+    scope = case params[:status]
+    when "pending" then scope.where(completed: false)
+    when "done"    then scope.where(completed: true)
+    else scope
+    end
+
+    scope = scope.where(priority: params[:priority]) if params[:priority].present?
+
+    scope = case params[:due]
+    when "overdue" then scope.where("due_date < ?", Date.today)
+    when "today"   then scope.where(due_date: Date.today)
+    when "week"    then scope.where(due_date: Date.today..Date.today.end_of_week)
+    else scope
+    end
+
+    @items = scope.order(completed: :asc, created_at: :asc)
+  end
+
   def create
     @item = @list.items.build(item_params)
     @item.user = current_user

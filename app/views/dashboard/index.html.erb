@@ -2,45 +2,69 @@
 
 <%# ─── Contadores ──────────────────────────────────────────────────── %>
 <div class="dashboard__stats">
-  <%= link_to lists_path, class: "stat-card" do %>
+  <div class="stat-card">
     <span class="stat-card__value"><%= @lists_count %></span>
     <span class="stat-card__label">Listas ativas</span>
-  <% end %>
+  </div>
 
-  <%= link_to lists_path, class: "stat-card" do %>
+  <div class="stat-card">
     <span class="stat-card__value"><%= @pending_count %></span>
     <span class="stat-card__label">Itens pendentes</span>
-  <% end %>
+  </div>
 
-  <%= link_to lists_path, class: "stat-card" do %>
+  <div class="stat-card">
     <span class="stat-card__value"><%= @completed_count %></span>
     <span class="stat-card__label">Itens concluídos</span>
-  <% end %>
+  </div>
 
-  <%= link_to lists_path, class: [ "stat-card", ("stat-card--overdue" if @overdue_count > 0) ] do %>
+  <div class="<%= [ "stat-card", ("stat-card--overdue" if @overdue_count > 0) ].compact.join(" ") %>">
     <span class="stat-card__value"><%= @overdue_count %></span>
     <span class="stat-card__label">Vencidos</span>
-  <% end %>
+  </div>
 </div>
 
-<%# ─── Gráficos: bar + pie ────────────────────────────────────────── %>
+<%# ─── Gráficos: column + pie ─────────────────────────────────────── %>
 <div class="dashboard__charts">
   <div class="dashboard__chart-card">
-    <%= column_chart @completed_by_day,
-          title: "Itens concluídos nos últimos 7 dias",
-          colors: [ "#FF5C13" ],
-          library: { scales: { y: { ticks: { precision: 0 } } } } %>
+    <%= turbo_frame_tag "chart-completed-by-day" do %>
+      <div class="chart-filter">
+        <%= form_with url: root_path, method: :get,
+              data: { turbo_frame: "chart-completed-by-day" },
+              class: "chart-filter__form" do |f| %>
+          <%= f.select :period,
+                [ [ "7 dias", 7 ], [ "30 dias", 30 ], [ "90 dias", 90 ] ],
+                { selected: @chart_period },
+                { class: "filter__select filter__select--sm", onchange: "this.form.requestSubmit()" } %>
+        <% end %>
+      </div>
+      <%= column_chart @completed_by_day,
+            title: "Itens concluídos nos últimos #{@chart_period} dias",
+            colors: [ "#FF5C13" ],
+            library: { scales: { y: { ticks: { precision: 0 } } } } %>
+    <% end %>
   </div>
 
   <div class="dashboard__chart-card">
-    <%= pie_chart @items_by_priority.presence || { "Sem itens" => 1 },
-          title: "Distribuição por prioridade",
-          colors: [ "#FF5C13", "#FF5C13", "#B86AFF", "#DDD0FF" ],
-          donut: true %>
+    <%= turbo_frame_tag "chart-priority" do %>
+      <div class="chart-filter">
+        <%= form_with url: root_path, method: :get,
+              data: { turbo_frame: "chart-priority" },
+              class: "chart-filter__form" do |f| %>
+          <%= f.select :chart_context_id,
+                current_user.contexts.pluck(:name, :id).prepend([ "Todos os workspaces", "" ]),
+                { selected: params[:chart_context_id], include_blank: false },
+                { class: "filter__select filter__select--sm", onchange: "this.form.requestSubmit()" } %>
+        <% end %>
+      </div>
+      <%= pie_chart @items_by_priority.presence || { "Sem itens" => 1 },
+            title: "Distribuição por prioridade",
+            colors: [ "#FF5C13", "#FF5C13", "#B86AFF", "#DDD0FF" ],
+            donut: true %>
+    <% end %>
   </div>
 </div>
 
-<%# ─── Gráfico: radar por contexto ───────────────────────────────── %>
+<%# ─── Gráfico: progresso por workspace ──────────────────────────── %>
 <% if @progress_by_context.any? %>
   <div class="dashboard__chart-card dashboard__chart-card--full">
     <%= bar_chart @progress_by_context,

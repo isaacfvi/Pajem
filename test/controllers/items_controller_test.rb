@@ -138,6 +138,69 @@ class ItemsControllerTest < ActionDispatch::IntegrationTest
     assert_not bob_item.reload.discarded?
   end
 
+  # ─── GET /listas/:list_id/itens (index + filtros) ───────────────────
+
+  test "GET /itens retorna 200" do
+    get list_items_path(@list)
+    assert_response :success
+  end
+
+  test "GET /itens?q= filtra por título" do
+    match   = @list.items.create!(title: "Estudar Rails", user: @alice)
+    nomatch = @list.items.create!(title: "Comprar pão", user: @alice)
+    get list_items_path(@list, q: "Rails")
+    assert_includes assigns(:items), match
+    assert_not_includes assigns(:items), nomatch
+  end
+
+  test "GET /itens?status=pending retorna apenas pendentes" do
+    @item.update!(completed: false)
+    done = @list.items.create!(title: "Feito", user: @alice, completed: true)
+    get list_items_path(@list, status: "pending")
+    assert_includes assigns(:items), @item
+    assert_not_includes assigns(:items), done
+  end
+
+  test "GET /itens?status=done retorna apenas concluídos" do
+    @item.update!(completed: true)
+    pending = @list.items.create!(title: "Pendente", user: @alice)
+    get list_items_path(@list, status: "done")
+    assert_includes assigns(:items), @item
+    assert_not_includes assigns(:items), pending
+  end
+
+  test "GET /itens?priority=high retorna apenas alta prioridade" do
+    high = @list.items.create!(title: "Urgente", user: @alice, priority: :high)
+    low  = @list.items.create!(title: "Opcional", user: @alice, priority: :low)
+    get list_items_path(@list, priority: "high")
+    assert_includes assigns(:items), high
+    assert_not_includes assigns(:items), low
+  end
+
+  test "GET /itens?due=overdue retorna apenas vencidos" do
+    overdue = @list.items.create!(title: "Atrasado", user: @alice, due_date: 2.days.ago)
+    future  = @list.items.create!(title: "No prazo", user: @alice, due_date: 2.days.from_now)
+    get list_items_path(@list, due: "overdue")
+    assert_includes assigns(:items), overdue
+    assert_not_includes assigns(:items), future
+  end
+
+  test "GET /itens aplica filtros compostos" do
+    match  = @list.items.create!(title: "Rails urgente", user: @alice, priority: :high)
+    wrong1 = @list.items.create!(title: "Rails simples", user: @alice, priority: :low)
+    wrong2 = @list.items.create!(title: "Outro urgente", user: @alice, priority: :high)
+    get list_items_path(@list, q: "Rails", priority: "high")
+    assert_includes assigns(:items), match
+    assert_not_includes assigns(:items), wrong1
+    assert_not_includes assigns(:items), wrong2
+  end
+
+  test "GET /itens retorna 404 para lista de outro usuário" do
+    bob_list = @bob.lists.create!(title: "Lista do Bob")
+    get list_items_path(bob_list)
+    assert_response :not_found
+  end
+
   # ─── Autenticação ───────────────────────────────────────────────────
 
   test "redirecionamentos sem autenticação" do
