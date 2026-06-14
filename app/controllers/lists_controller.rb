@@ -3,8 +3,10 @@ class ListsController < ApplicationController
 
   def index
     @active_context = current_user.contexts.find_by(id: params[:context_id])
-    @lists = current_user.lists.kept.includes(:items, :context)
-    @lists = @lists.where(context_id: @active_context.id) if @active_context
+    scope = current_user.lists.kept.includes(:context, :items)
+    scope = scope.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+    scope = scope.where(context_id: @active_context.id)    if @active_context
+    @lists = scope.order(created_at: :desc)
   end
 
   def new

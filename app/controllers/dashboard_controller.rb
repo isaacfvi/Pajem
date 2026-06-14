@@ -7,16 +7,25 @@ class DashboardController < ApplicationController
                                    .where(completed: false)
                                    .where("due_date < ?", Date.today).count
 
+    @chart_period = (params[:period] || 7).to_i.clamp(1, 90)
     @completed_by_day = current_user.items.kept
                                     .where(completed: true)
-                                    .group_by_day(:completed_at, range: 6.days.ago..Time.now)
+                                    .group_by_day(:completed_at, range: (@chart_period - 1).days.ago..Time.now)
                                     .count
 
-    @items_by_priority = current_user.items.kept
-                                     .where(completed: false)
-                                     .group(:priority)
-                                     .count
-                                     .transform_keys { |k| Item::PRIORITY_LABELS[k] || "Sem prioridade" }
+    context_scope = if params[:chart_context_id].present?
+                      current_user.items.kept
+                                  .joins(:list)
+                                  .where(lists: { context_id: params[:chart_context_id] })
+    else
+      current_user.items.kept
+    end
+
+    @items_by_priority = context_scope
+                           .where(completed: false)
+                           .group(:priority)
+                           .count
+                           .transform_keys { |k| Item::PRIORITY_LABELS[k] || "Sem prioridade" }
 
     @progress_by_context = build_context_progress
 

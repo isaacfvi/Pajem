@@ -3,11 +3,29 @@
 <div id="lists-page" class="lists-page" data-controller="list-expand">
   <%= turbo_stream_from [ current_user, :lists ] %>
 
-  <%# Header do grid — visível enquanto nenhuma lista está aberta %>
-  <div class="content-header" data-list-expand-target="gridHeader">
-    <h1 class="content-header__title"><%= @active_context&.name || "Todas as listas" %></h1>
-    <div class="content-header__actions">
-      <%= link_to "+ Nova Lista", new_list_path, class: "btn btn--primary" %>
+  <%# Header + filtros — ocultos ao expandir painel %>
+  <div data-list-expand-target="gridHeader">
+    <div class="content-header">
+      <h1 class="content-header__title"><%= @active_context&.name || "Todas as listas" %></h1>
+      <div class="content-header__actions">
+        <%= link_to "+ Nova Lista", new_list_path, class: "btn btn--primary" %>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <%= form_with url: lists_path, method: :get, class: "filter-bar__form" do |f| %>
+        <%= f.text_field :q, value: params[:q], placeholder: "Buscar listas…",
+              class: "filter__search",
+              autocomplete: "off" %>
+        <%= f.select :context_id,
+              current_user.contexts.pluck(:name, :id).prepend([ "Todos os workspaces", "" ]),
+              { selected: params[:context_id], include_blank: false },
+              { class: "filter__select", onchange: "this.form.requestSubmit()" } %>
+        <%= f.submit "Buscar", class: "btn btn--ghost btn--sm" %>
+        <% if params[:q].present? || params[:context_id].present? %>
+          <%= link_to "Limpar", lists_path, class: "btn btn--ghost btn--sm" %>
+        <% end %>
+      <% end %>
     </div>
   </div>
 
@@ -19,8 +37,15 @@
 
     <% if @lists.empty? %>
       <div class="postit postit--empty">
-        <p>Nenhuma lista ainda.</p>
-        <%= link_to "Criar primeira lista", new_list_path, class: "btn btn--primary postit__empty-cta" %>
+        <% if params[:q].present? %>
+          <p>Nenhuma lista encontrada para '<%= params[:q] %>'.</p>
+          <%= link_to "Limpar busca", lists_path, class: "btn btn--ghost postit__empty-cta" %>
+        <% elsif params[:context_id].present? %>
+          <p>Nenhuma lista neste workspace.</p>
+        <% else %>
+          <p>Nenhuma lista ainda.</p>
+          <%= link_to "Criar primeira lista", new_list_path, class: "btn btn--primary postit__empty-cta" %>
+        <% end %>
       </div>
     <% end %>
   </div>

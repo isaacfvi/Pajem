@@ -91,6 +91,29 @@ class DashboardControllerTest < ActionDispatch::IntegrationTest
     assert_not_includes assigns(:upcoming_items), bob_item
   end
 
+  # ─── Filtros dos gráficos ─────────────────────────────────────────────
+
+  test "GET /?period=30 retorna 30 pontos no gráfico" do
+    get root_path(period: 30)
+    assert_equal 30, assigns(:completed_by_day).size
+  end
+
+  test "GET /?period= com valor inválido usa clamp (máximo 90)" do
+    get root_path(period: 999)
+    assert_equal 90, assigns(:chart_period)
+  end
+
+  test "GET /?chart_context_id= filtra pie chart pelo workspace" do
+    other_ctx  = @alice.contexts.create!(name: "Pessoal")
+    other_list = @alice.lists.create!(title: "Pessoal", context: other_ctx)
+    other_list.items.create!(title: "Item pessoal", user: @alice, priority: :high)
+    @item.update!(priority: :medium)
+
+    get root_path(chart_context_id: @ctx.id)
+    refute assigns(:items_by_priority).key?("Alta")
+    assert assigns(:items_by_priority).key?("Média")
+  end
+
   # ─── Atividade recente ────────────────────────────────────────────────
 
   test "GET / exibe atividade recente do usuário" do

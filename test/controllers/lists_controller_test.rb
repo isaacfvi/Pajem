@@ -48,6 +48,37 @@ class ListsControllerTest < ActionDispatch::IntegrationTest
     assert_redirected_to login_path
   end
 
+  # ─── Busca e filtros ──────────────────────────────────────────────────
+
+  test "GET /listas?q= filtra listas pelo título" do
+    match   = @alice.lists.create!(title: "Leitura Rails")
+    nomatch = @alice.lists.create!(title: "Compras do mês")
+    get lists_path(q: "Rails")
+    assert_includes assigns(:lists), match
+    assert_not_includes assigns(:lists), nomatch
+  end
+
+  test "GET /listas?q= não retorna listas de outro usuário" do
+    bob_list = @bob.lists.create!(title: "Rails do Bob")
+    get lists_path(q: "Rails")
+    assert_not_includes assigns(:lists), bob_list
+  end
+
+  test "GET /listas?context_id= filtra por workspace" do
+    outro = @alice.lists.create!(title: "Sem contexto")
+    get lists_path(context_id: @ctx.id)
+    assert_includes assigns(:lists), @list
+    assert_not_includes assigns(:lists), outro
+  end
+
+  test "GET /listas?q=&context_id= aplica filtros compostos" do
+    match  = @alice.lists.create!(title: "Trabalho Rails", context: @ctx)
+    wrong_ctx = @alice.lists.create!(title: "Rails pessoal")
+    get lists_path(q: "Rails", context_id: @ctx.id)
+    assert_includes assigns(:lists), match
+    assert_not_includes assigns(:lists), wrong_ctx
+  end
+
   # ─── GET /listas/nova ─────────────────────────────────────────────────
 
   test "GET /listas/nova renderiza formulário" do
