@@ -7,7 +7,7 @@
 </p>
 
 <p>
-  <%= link_to "Reativar minha conta", reactivate_account_url(@user.reset_password_token) %>
+  <%= link_to "Reativar minha conta", reactivate_conta_url(token: @user.reset_password_token) %>
 </p>
 
 <p>Se você não solicitou a reativação, ignore este e-mail.</p>

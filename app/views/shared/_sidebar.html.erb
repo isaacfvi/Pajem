@@ -60,6 +60,12 @@
 
   <div class="sidebar__divider"></div>
 
+  <a href="<%= conta_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == conta_path %>">
+    <span class="sidebar__link-icon">&#9881;</span>
+    Configurações
+  </a>
+
   <a href="<%= trash_path %>"
      class="sidebar__link <%= 'sidebar__link--active' if request.path == trash_path %>">
     <span class="sidebar__link-icon">&#128465;</span>

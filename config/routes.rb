@@ -32,6 +32,14 @@ Rails.application.routes.draw do
     resources :messages, path: "/mensagens", only: [ :create ]
   end
 
+  resource :conta, only: [ :show, :update, :destroy ], path: "/conta", controller: "accounts" do
+    collection do
+      get  "reativar/reenviar", to: "accounts#reactivation_form",   as: :reactivation_form
+      post "reativar/reenviar", to: "accounts#resend_reactivation",  as: :resend_reactivation
+      get  "reativar/:token",   to: "accounts#reactivate",           as: :reactivate
+    end
+  end
+
   get "/historico", to: "audit_logs#index", as: :audit_logs
 
   get    "/lixeira",                       to: "trash#index",        as: :trash
