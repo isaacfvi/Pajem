@@ -30,13 +30,13 @@ class SharesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "GET /c/:token exibe os itens da lista" do
-    @list.items.create!(title: "Item visível", list: @list)
+    @list.items.create!(title: "Item visível", user: @alice)
     get share_path("tok123")
     assert_match "Item visível", response.body
   end
 
   test "GET /c/:token não exibe itens descartados" do
-    item = @list.items.create!(title: "Item excluído", list: @list)
+    item = @list.items.create!(title: "Item excluído", user: @alice)
     item.discard
     get share_path("tok123")
     assert_no_match "Item excluído", response.body
