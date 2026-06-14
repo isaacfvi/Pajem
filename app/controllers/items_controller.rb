@@ -6,7 +6,7 @@ class ItemsController < ApplicationController
     @item = @list.items.build(item_params)
     @item.user = current_user
     if @item.save
-      AuditLog.record(user: current_user, action: "created", auditable: @item)
+      AuditLog.record(user: current_user, action: "created", auditable: @item, origin: "manual")
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to lists_path, notice: "Item criado." }
@@ -31,7 +31,7 @@ class ItemsController < ApplicationController
 
   def update
     if @item.update(item_params)
-      AuditLog.record(user: current_user, action: "updated", auditable: @item)
+      AuditLog.record(user: current_user, action: "updated", auditable: @item, origin: "manual", changes: @item.saved_changes)
       respond_to do |format|
         format.turbo_stream
         format.html { redirect_to lists_path, notice: "Item atualizado." }
@@ -43,7 +43,7 @@ class ItemsController < ApplicationController
 
   def destroy
     @item.discard
-    AuditLog.record(user: current_user, action: "deleted", auditable: @item)
+    AuditLog.record(user: current_user, action: "deleted", auditable: @item, origin: "manual")
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to lists_path }
@@ -54,7 +54,7 @@ class ItemsController < ApplicationController
     new_completed = !@item.completed
     action = new_completed ? "completed" : "uncompleted"
     @item.update!(completed: new_completed)
-    AuditLog.record(user: current_user, action: action, auditable: @item)
+    AuditLog.record(user: current_user, action: action, auditable: @item, origin: "manual")
     respond_to do |format|
       format.turbo_stream
       format.html { redirect_to lists_path }

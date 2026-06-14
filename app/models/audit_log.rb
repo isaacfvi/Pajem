@@ -2,6 +2,28 @@ class AuditLog < ApplicationRecord
   VALID_ACTIONS = %w[ created updated deleted restored completed uncompleted shared unshared ].freeze
   VALID_ORIGINS = %w[ manual assistant ].freeze
 
+  ACTION_LABELS = {
+    "created"     => "criado",
+    "updated"     => "atualizado",
+    "deleted"     => "excluído",
+    "restored"    => "restaurado",
+    "completed"   => "concluído",
+    "uncompleted" => "desmarcado",
+    "shared"      => "compartilhado",
+    "unshared"    => "descompartilhado"
+  }.freeze
+
+  ORIGIN_LABELS = {
+    "manual"    => "Manual",
+    "assistant" => "Pajem"
+  }.freeze
+
+  RESOURCE_LABELS = {
+    "List"    => "Lista",
+    "Item"    => "Item",
+    "Context" => "Contexto"
+  }.freeze
+
   belongs_to :user, optional: true
   belongs_to :auditable, polymorphic: true
 

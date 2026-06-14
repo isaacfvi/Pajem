@@ -1,0 +1,95 @@
+<% content_for :page_title, "Histórico" %>
+
+<div class="audit-filters">
+  <%= form_with url: audit_logs_path, method: :get, local: true, class: "audit-filters__form" do |f| %>
+    <div class="audit-filters__group">
+      <%= f.label :date_from, "De", class: "audit-filters__label" %>
+      <%= f.date_field :date_from, value: params[:date_from], class: "form-input audit-filters__input" %>
+    </div>
+
+    <div class="audit-filters__group">
+      <%= f.label :date_to, "Até", class: "audit-filters__label" %>
+      <%= f.date_field :date_to, value: params[:date_to], class: "form-input audit-filters__input" %>
+    </div>
+
+    <div class="audit-filters__group">
+      <%= f.label :action, "Ação", class: "audit-filters__label" %>
+      <%= f.select :action,
+            [ [ "Todas", "" ],
+              [ "Criado", "created" ],
+              [ "Atualizado", "updated" ],
+              [ "Excluído", "deleted" ],
+              [ "Concluído", "completed" ],
+              [ "Desmarcado", "uncompleted" ] ],
+            { selected: request.query_parameters[ "action" ] },
+            class: "form-input form-select audit-filters__input" %>
+    </div>
+
+    <div class="audit-filters__group">
+      <%= f.label :origin, "Origem", class: "audit-filters__label" %>
+      <%= f.select :origin,
+            [ [ "Todas", "" ],
+              [ "Manual", "manual" ],
+              [ "Pajem", "assistant" ] ],
+            { selected: params[:origin] },
+            class: "form-input form-select audit-filters__input" %>
+    </div>
+
+    <%= f.submit "Filtrar", class: "btn btn--ghost" %>
+
+    <% if params.slice(:action, :origin, :date_from, :date_to).values.any?(&:present?) %>
+      <%= link_to "Limpar", audit_logs_path, class: "btn btn--ghost" %>
+    <% end %>
+  <% end %>
+</div>
+
+<% if @audit_logs.empty? %>
+  <div class="audit-empty">
+    <p class="audit-empty__text">Nenhum evento encontrado.</p>
+  </div>
+<% else %>
+  <ol class="audit-timeline">
+    <% @audit_logs.each do |log| %>
+      <li class="audit-entry">
+        <div class="audit-entry__meta">
+          <time class="audit-entry__time" datetime="<%= log.created_at.iso8601 %>">
+            <%= format_audit_time(log.created_at) %>
+          </time>
+          <span class="audit-entry__origin audit-entry__origin--<%= log.origin %>">
+            <%= AuditLog::ORIGIN_LABELS[log.origin] %>
+          </span>
+        </div>
+
+        <div class="audit-entry__body">
+          <span class="audit-entry__resource-type">
+            <%= AuditLog::RESOURCE_LABELS.fetch(log.auditable_type, log.auditable_type) %>
+          </span>
+          <span class="audit-entry__resource-name">
+            "<%= log.auditable&.respond_to?(:title) ? log.auditable.title : log.auditable&.name || "recurso removido" %>"
+          </span>
+          <span class="audit-entry__action">
+            <%= AuditLog::ACTION_LABELS.fetch(log.action, log.action) %>
+          </span>
+        </div>
+
+        <% if log.changeset.present? %>
+          <ul class="audit-entry__changes">
+            <% log.changeset.each do |field, (before, after)| %>
+              <% next if %w[ updated_at created_at ].include?(field) %>
+              <li class="audit-entry__change">
+                <span class="audit-entry__field"><%= field %></span>
+                <span class="audit-entry__before"><%= before.presence || "—" %></span>
+                <span class="audit-entry__arrow">→</span>
+                <span class="audit-entry__after"><%= after.presence || "—" %></span>
+              </li>
+            <% end %>
+          </ul>
+        <% end %>
+      </li>
+    <% end %>
+  </ol>
+
+  <div class="audit-pagination">
+    <%= paginate @audit_logs %>
+  </div>
+<% end %>
