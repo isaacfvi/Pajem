@@ -20,6 +20,13 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 * cache ([#53](https://github.com/isaacfvi/Pajem/issues/53)) ([25bd295](https://github.com/isaacfvi/Pajem/commit/25bd2953270cfe92ee39a863d292b7e642accc45))
 
+## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v1.0.0...v1.0.0) (2026-06-14)
+
+
+### Adicionado
+
+* cache ([#53](https://github.com/isaacfvi/Pajem/issues/53)) ([25bd295](https://github.com/isaacfvi/Pajem/commit/25bd2953270cfe92ee39a863d292b7e642accc45))
+
 ## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v0.3.0...v1.0.0) (2026-06-14)
 
 
