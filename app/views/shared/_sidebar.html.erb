@@ -1,5 +1,6 @@
 <nav class="sidebar" aria-label="Navegação principal" data-controller="context-delete">
-  <a href="#" class="sidebar__link">
+  <a href="<%= root_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == root_path %>">
     <span class="sidebar__link-icon">&#9706;</span>
     Dashboard
   </a>
@@ -58,6 +59,12 @@
   </div>
 
   <div class="sidebar__divider"></div>
+
+  <a href="<%= conta_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == conta_path %>">
+    <span class="sidebar__link-icon">&#9881;</span>
+    Configurações
+  </a>
 
   <a href="<%= trash_path %>"
      class="sidebar__link <%= 'sidebar__link--active' if request.path == trash_path %>">

@@ -5,6 +5,13 @@ class Item < ApplicationRecord
   belongs_to :list
   belongs_to :user
 
+  PRIORITY_LABELS = {
+    "low"    => "Baixa",
+    "medium" => "Média",
+    "high"   => "Alta",
+    nil      => "Sem prioridade"
+  }.freeze
+
   enum :priority, { low: 0, medium: 1, high: 2 }, prefix: true
 
   validates :title, presence: true, length: { maximum: 255 }

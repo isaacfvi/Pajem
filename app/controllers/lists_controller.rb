@@ -1,10 +1,12 @@
 class ListsController < ApplicationController
-  before_action :set_list, only: [ :edit, :update, :destroy ]
+  before_action :set_list, only: [ :edit, :update, :destroy, :compartilhar, :revogar_link ]
 
   def index
     @active_context = current_user.contexts.find_by(id: params[:context_id])
-    @lists = current_user.lists.kept.includes(:items, :context)
-    @lists = @lists.where(context_id: @active_context.id) if @active_context
+    scope = current_user.lists.kept.includes(:context, :items)
+    scope = scope.where("title ILIKE ?", "%#{params[:q]}%") if params[:q].present?
+    scope = scope.where(context_id: @active_context.id)    if @active_context
+    @lists = scope.order(created_at: :desc)
   end
 
   def new
@@ -38,6 +40,31 @@ class ListsController < ApplicationController
     @list.discard
     AuditLog.record(user: current_user, action: "deleted", auditable: @list, origin: "manual")
     redirect_to lists_path, notice: "Lista \"#{title}\" excluída."
+  end
+
+  def compartilhar
+    if @list.share_enabled?
+      @list.update!(share_enabled: false)
+      AuditLog.record(user: current_user, action: "unshared", auditable: @list, origin: "manual")
+    else
+      @list.share_token ||= SecureRandom.urlsafe_base64(16)
+      @list.share_enabled = true
+      @list.save!
+      AuditLog.record(user: current_user, action: "shared", auditable: @list, origin: "manual")
+    end
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to lists_path }
+    end
+  end
+
+  def revogar_link
+    @list.update!(share_token: SecureRandom.urlsafe_base64(16), share_enabled: true)
+    AuditLog.record(user: current_user, action: "shared", auditable: @list, origin: "manual")
+    respond_to do |format|
+      format.turbo_stream
+      format.html { redirect_to lists_path }
+    end
   end
 
   private

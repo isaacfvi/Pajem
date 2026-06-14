@@ -1,0 +1,36 @@
+<% content_for :title, "#{@list.title} — Pajem" %>
+
+<div class="share-list">
+  <div class="share-list__header">
+    <% if @list.color %>
+      <span class="share-list__color-dot" style="background-color: <%= @list.color %>"></span>
+    <% end %>
+    <h1 class="share-list__title"><%= @list.title %></h1>
+  </div>
+
+  <% if @list.description.present? %>
+    <p class="share-list__description"><%= @list.description %></p>
+  <% end %>
+
+  <% if @items.empty? %>
+    <p class="share-list__empty">Nenhum item nesta lista.</p>
+  <% else %>
+    <ul class="share-items">
+      <% @items.each do |item| %>
+        <li class="share-item <%= 'share-item--completed' if item.completed %>">
+          <span class="share-item__check">
+            <%= item.completed ? "✓" : "○" %>
+          </span>
+          <span class="share-item__title"><%= item.title %></span>
+          <% if item.due_date.present? %>
+            <span class="share-item__due"><%= format_audit_time(item.due_date.to_time) %></span>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <p class="share-list__footer">
+    Compartilhado via <a href="/">Pajem</a>
+  </p>
+</div>

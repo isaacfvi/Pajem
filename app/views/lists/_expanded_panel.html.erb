@@ -29,16 +29,41 @@
     <%= render "lists/progress_bar", list: list %>
   </div>
 
-  <div id="list_items_<%= list.id %>" class="list-expanded__items">
-    <% if panel_items.empty? %>
-      <p id="list_empty_<%= list.id %>" class="list-expanded__empty">Nenhum item nesta lista.</p>
-    <% end %>
-    <% panel_items.each do |item| %>
-      <%= render "items/item", item: item, list: list %>
-    <% end %>
-  </div>
+  <%= turbo_frame_tag "items_filter_frame_#{list.id}" do %>
+    <div class="items-filter">
+      <%= form_with url: list_items_path(list), method: :get, class: "items-filter__form" do |f| %>
+        <%= f.text_field :q, placeholder: "Buscar itens…",
+              class: "filter__search filter__search--sm",
+              autocomplete: "off" %>
+        <%= f.select :status,
+              [ [ "Todos", "" ], [ "Pendentes", "pending" ], [ "Concluídos", "done" ] ],
+              { selected: "", include_blank: false },
+              { class: "filter__select filter__select--sm", onchange: "this.form.requestSubmit()" } %>
+        <%= f.select :priority,
+              [ [ "Prioridade", "" ], [ "Baixa", "low" ], [ "Média", "medium" ], [ "Alta", "high" ] ],
+              { selected: "", include_blank: false },
+              { class: "filter__select filter__select--sm", onchange: "this.form.requestSubmit()" } %>
+        <%= f.select :due,
+              [ [ "Prazo", "" ], [ "Vencidos", "overdue" ], [ "Hoje", "today" ], [ "Esta semana", "week" ] ],
+              { selected: "", include_blank: false },
+              { class: "filter__select filter__select--sm", onchange: "this.form.requestSubmit()" } %>
+        <%= f.submit "Buscar", class: "btn btn--ghost btn--sm" %>
+      <% end %>
+    </div>
+
+    <div id="list_items_<%= list.id %>" class="list-expanded__items">
+      <% if panel_items.empty? %>
+        <p id="list_empty_<%= list.id %>" class="list-expanded__empty">Nenhum item nesta lista.</p>
+      <% end %>
+      <% panel_items.each do |item| %>
+        <%= render "items/item", item: item, list: list %>
+      <% end %>
+    </div>
+  <% end %>
 
   <div id="new_item_form_<%= list.id %>" class="list-expanded__new-form">
     <%= render "items/new_form", item: Item.new, list: list %>
   </div>
+
+  <%= render "lists/share_panel", list: list %>
 </div>

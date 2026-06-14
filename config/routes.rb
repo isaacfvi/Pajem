@@ -15,15 +15,29 @@ Rails.application.routes.draw do
 
   resources :contexts, path: "/contextos", only: [ :new, :create, :edit, :update, :destroy ]
   resources :lists, path: "/listas", only: [ :index, :new, :create, :edit, :update, :destroy ] do
-    resources :items, path: "/itens", only: [ :show, :create, :edit, :update, :destroy ] do
+    member do
+      patch :compartilhar
+      patch :revogar_link
+    end
+    resources :items, path: "/itens", only: [ :index, :show, :create, :edit, :update, :destroy ] do
       member do
         patch :toggle
       end
     end
   end
 
+  get "/c/:token", to: "shares#show", as: :share
+
   namespace :pajem do
     resources :messages, path: "/mensagens", only: [ :create ]
+  end
+
+  resource :conta, only: [ :show, :update, :destroy ], path: "/conta", controller: "accounts" do
+    collection do
+      get  "reativar/reenviar", to: "accounts#reactivation_form",   as: :reactivation_form
+      post "reativar/reenviar", to: "accounts#resend_reactivation",  as: :resend_reactivation
+      get  "reativar/:token",   to: "accounts#reactivate",           as: :reactivate
+    end
   end
 
   get "/historico", to: "audit_logs#index", as: :audit_logs
@@ -34,5 +48,5 @@ Rails.application.routes.draw do
   patch  "/lixeira/itens/:id/restaurar",   to: "trash#restore_item", as: :restore_trash_item
   delete "/lixeira/itens/:id",             to: "trash#destroy_item", as: :trash_item
 
-  root to: "lists#index"
+  root to: "dashboard#index"
 end

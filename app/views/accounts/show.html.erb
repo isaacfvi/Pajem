@@ -1,0 +1,77 @@
+<% content_for :page_title, "Configurações da conta" %>
+
+<div class="account-settings">
+
+  <%# ─── Informações da conta ──────────────────────────────────────── %>
+  <section class="account-section">
+    <h2 class="account-section__title">Minha conta</h2>
+    <div class="account-info">
+      <div class="account-info__row">
+        <span class="account-info__label">Nome</span>
+        <span class="account-info__value"><%= current_user.name %></span>
+      </div>
+      <div class="account-info__row">
+        <span class="account-info__label">E-mail</span>
+        <span class="account-info__value"><%= current_user.email %></span>
+      </div>
+    </div>
+  </section>
+
+  <%# ─── Alterar senha ────────────────────────────────────────────── %>
+  <section class="account-section">
+    <h2 class="account-section__title">Alterar senha</h2>
+    <%= form_with url: conta_path, method: :patch, class: "account-form" do |f| %>
+      <div class="account-form__group">
+        <%= f.label :current_password, "Senha atual", class: "account-form__label" %>
+        <%= f.password_field :current_password, class: "account-form__input", autocomplete: "current-password" %>
+      </div>
+      <div class="account-form__group">
+        <%= f.label :new_password, "Nova senha", class: "account-form__label" %>
+        <%= f.password_field :new_password, class: "account-form__input", autocomplete: "new-password" %>
+      </div>
+      <div class="account-form__group">
+        <%= f.label :new_password_confirmation, "Confirmar nova senha", class: "account-form__label" %>
+        <%= f.password_field :new_password_confirmation, class: "account-form__input", autocomplete: "new-password" %>
+      </div>
+      <%= f.submit "Alterar senha", class: "btn btn--primary" %>
+    <% end %>
+  </section>
+
+  <%# ─── Zona de perigo ───────────────────────────────────────────── %>
+  <section class="danger-zone">
+    <h2 class="danger-zone__title">Zona de perigo</h2>
+
+    <div class="danger-action">
+      <div class="danger-action__info">
+        <p class="danger-action__name">Desativar conta</p>
+        <p class="danger-action__desc">
+          Sua conta ficará inativa. Você poderá reativá-la a qualquer momento pelo link enviado ao seu e-mail.
+        </p>
+      </div>
+      <%= button_to conta_path,
+            method: :delete,
+            params: { action_type: "deactivate" },
+            class: "btn btn--danger",
+            data: { turbo_confirm: "Deseja desativar sua conta? Você receberá um e-mail para reativá-la." } do %>
+        Desativar conta
+      <% end %>
+    </div>
+
+    <div class="danger-action danger-action--separator">
+      <div class="danger-action__info">
+        <p class="danger-action__name">Excluir dados permanentemente</p>
+        <p class="danger-action__desc">
+          Todos os seus dados serão removidos definitivamente. Esta ação não pode ser desfeita.
+        </p>
+      </div>
+      <%= button_to conta_path,
+            method: :delete,
+            params: { action_type: "hard_delete" },
+            class: "btn btn--danger",
+            data: { turbo_confirm: "Esta ação é irreversível. Todos os seus dados serão excluídos permanentemente. Tem certeza?" } do %>
+        Excluir permanentemente
+      <% end %>
+    </div>
+  </section>
+
+</div>

@@ -1,0 +1,36 @@
+<div id="share_panel_<%= list.id %>" class="share-panel">
+  <% if list.share_enabled? %>
+    <div class="share-panel__active"
+         data-controller="clipboard"
+         data-clipboard-url-value="<%= share_url(list.share_token) %>">
+      <p class="share-panel__label">Link público ativo</p>
+      <div class="share-panel__link-row">
+        <input type="text"
+               readonly
+               value="<%= share_url(list.share_token) %>"
+               class="share-panel__url"
+               data-clipboard-target="input">
+        <button class="btn btn--ghost btn--sm"
+                data-clipboard-target="button"
+                data-action="click->clipboard#copy">
+          Copiar link
+        </button>
+      </div>
+      <div class="share-panel__controls">
+        <%= button_to "Desativar link", compartilhar_list_path(list),
+              method: :patch,
+              class: "btn btn--ghost btn--sm" %>
+        <%= button_to "Revogar e gerar novo link", revogar_link_list_path(list),
+              method: :patch,
+              class: "share-panel__revoke-btn",
+              data: { turbo_confirm: "Revogar o link atual? O link anterior será invalidado permanentemente." } %>
+      </div>
+    </div>
+  <% else %>
+    <div class="share-panel__inactive">
+      <%= button_to "Compartilhar lista", compartilhar_list_path(list),
+            method: :patch,
+            class: "btn btn--ghost btn--sm" %>
+    </div>
+  <% end %>
+</div>
