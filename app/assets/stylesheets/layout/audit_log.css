@@ -1,0 +1,252 @@
+/* ─── Filtros ────────────────────────────────────────────────────────── */
+.audit-filters {
+  background-color: var(--color-bg-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+}
+
+.audit-filters__form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 0.75rem;
+}
+
+.audit-filters__group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.audit-filters__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.audit-filters__input {
+  padding: 0.45rem 0.65rem;
+  font-size: 0.85rem;
+  min-width: 140px;
+}
+
+/* ─── Estado vazio ───────────────────────────────────────────────────── */
+.audit-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+}
+
+.audit-empty__text {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+/* ─── Timeline ───────────────────────────────────────────────────────── */
+.audit-timeline {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  position: relative;
+}
+
+.audit-timeline::before {
+  content: "";
+  position: absolute;
+  left: 0.9rem;
+  top: 0.5rem;
+  bottom: 0.5rem;
+  width: 2px;
+  background-color: var(--color-border);
+  border-radius: 1px;
+}
+
+/* ─── Entrada individual ─────────────────────────────────────────────── */
+.audit-entry {
+  position: relative;
+  padding: 0.85rem 0.75rem 0.85rem 2.75rem;
+  border-bottom: 1px solid var(--color-border);
+  transition: background-color 0.1s;
+}
+
+.audit-entry:last-child {
+  border-bottom: none;
+}
+
+.audit-entry:hover {
+  background-color: var(--color-bg-surface);
+  border-radius: 8px;
+}
+
+.audit-entry::before {
+  content: "";
+  position: absolute;
+  left: 0.5rem;
+  top: 1.15rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-bg);
+  box-shadow: 0 0 0 2px var(--color-border);
+  z-index: 1;
+}
+
+/* ─── Meta (tempo + origem) ──────────────────────────────────────────── */
+.audit-entry__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.audit-entry__time {
+  font-size: 0.775rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.audit-entry__origin {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.audit-entry__origin--manual {
+  background-color: rgba(150, 51, 255, 0.12);
+  color: var(--color-primary);
+}
+
+.audit-entry__origin--assistant {
+  background-color: rgba(255, 92, 19, 0.12);
+  color: var(--color-secondary);
+}
+
+[data-theme="dark"] .audit-entry__origin--manual {
+  background-color: rgba(184, 106, 255, 0.15);
+  color: var(--color-primary-light);
+}
+
+[data-theme="dark"] .audit-entry__origin--assistant {
+  background-color: rgba(255, 122, 61, 0.15);
+  color: var(--color-secondary-light);
+}
+
+/* ─── Corpo da entrada ───────────────────────────────────────────────── */
+.audit-entry__body {
+  font-size: 0.9rem;
+  color: var(--color-text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.audit-entry__resource-type {
+  font-weight: 600;
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+}
+
+.audit-entry__resource-name {
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.audit-entry__action {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+/* ─── Changeset ──────────────────────────────────────────────────────── */
+.audit-entry__changes {
+  list-style: none;
+  margin-top: 0.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.audit-entry__change {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.775rem;
+  color: var(--color-text-muted);
+}
+
+.audit-entry__field {
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.audit-entry__before {
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.audit-entry__arrow {
+  opacity: 0.5;
+}
+
+.audit-entry__after {
+  color: var(--color-text);
+  font-weight: 500;
+}
+
+/* ─── Paginação (kaminari) ───────────────────────────────────────────── */
+.audit-pagination {
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.audit-pagination nav {
+  display: flex;
+  gap: 0.35rem;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.audit-pagination a,
+.audit-pagination span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2rem;
+  height: 2rem;
+  padding: 0 0.5rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  border: 1px solid var(--color-border);
+  text-decoration: none;
+  transition: background-color 0.12s, border-color 0.12s;
+  color: var(--color-text);
+}
+
+.audit-pagination a:hover {
+  background-color: var(--color-bg-surface);
+  color: var(--color-text);
+  border-color: var(--color-primary-light);
+}
+
+.audit-pagination .current {
+  background-color: var(--color-secondary);
+  color: #fff;
+  border-color: var(--color-secondary);
+  font-weight: 700;
+}
+
+.audit-pagination .disabled {
+  opacity: 0.35;
+  cursor: default;
+}

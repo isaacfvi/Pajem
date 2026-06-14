@@ -26,5 +26,7 @@ Rails.application.routes.draw do
     resources :messages, path: "/mensagens", only: [ :create ]
   end
 
+  get "/historico", to: "audit_logs#index", as: :audit_logs
+
   root to: "lists#index"
 end

@@ -14,7 +14,7 @@ class ListsController < ApplicationController
   def create
     @list = current_user.lists.build(list_params)
     if @list.save
-      AuditLog.record(user: current_user, action: "created", auditable: @list)
+      AuditLog.record(user: current_user, action: "created", auditable: @list, origin: "manual")
       redirect_to lists_path, notice: "Lista \"#{@list.title}\" criada."
     else
       render :new, status: :unprocessable_entity
@@ -26,7 +26,7 @@ class ListsController < ApplicationController
 
   def update
     if @list.update(list_params)
-      AuditLog.record(user: current_user, action: "updated", auditable: @list)
+      AuditLog.record(user: current_user, action: "updated", auditable: @list, origin: "manual", changes: @list.saved_changes)
       redirect_to lists_path, notice: "Lista \"#{@list.title}\" atualizada."
     else
       render :edit, status: :unprocessable_entity
@@ -36,7 +36,7 @@ class ListsController < ApplicationController
   def destroy
     title = @list.title
     @list.discard
-    AuditLog.record(user: current_user, action: "deleted", auditable: @list)
+    AuditLog.record(user: current_user, action: "deleted", auditable: @list, origin: "manual")
     redirect_to lists_path, notice: "Lista \"#{title}\" excluída."
   end
 

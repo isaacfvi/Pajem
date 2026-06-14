@@ -4,6 +4,12 @@
     Dashboard
   </a>
 
+  <a href="<%= audit_logs_path %>"
+     class="sidebar__link <%= 'sidebar__link--active' if request.path == audit_logs_path %>">
+    <span class="sidebar__link-icon">&#128203;</span>
+    Histórico
+  </a>
+
   <div class="sidebar__divider"></div>
 
   <p class="sidebar__section-label">Listas</p>
