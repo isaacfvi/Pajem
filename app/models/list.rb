@@ -51,6 +51,8 @@ class List < ApplicationRecord
   end
 
   def broadcast_list_updated
+    return if share_only_update?
+
     if saved_change_to_deleted_at? && discarded?
       broadcast_remove_to [ user, :lists ], target: dom_id(self)
       broadcast_remove_to [ user, :lists ], target: dom_id(self, :panel)
@@ -64,6 +66,12 @@ class List < ApplicationRecord
         partial: "lists/expanded_panel",
         locals:  { list: self }
     end
+  end
+
+  SHARE_FIELDS = %w[ share_token share_enabled updated_at ].freeze
+
+  def share_only_update?
+    saved_changes.keys.all? { |k| SHARE_FIELDS.include?(k) }
   end
 
   def broadcast_list_destroyed

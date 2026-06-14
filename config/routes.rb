@@ -15,12 +15,18 @@ Rails.application.routes.draw do
 
   resources :contexts, path: "/contextos", only: [ :new, :create, :edit, :update, :destroy ]
   resources :lists, path: "/listas", only: [ :index, :new, :create, :edit, :update, :destroy ] do
+    member do
+      patch :compartilhar
+      patch :revogar_link
+    end
     resources :items, path: "/itens", only: [ :show, :create, :edit, :update, :destroy ] do
       member do
         patch :toggle
       end
     end
   end
+
+  get "/c/:token", to: "shares#show", as: :share
 
   namespace :pajem do
     resources :messages, path: "/mensagens", only: [ :create ]

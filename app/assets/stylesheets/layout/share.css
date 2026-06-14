@@ -1,0 +1,211 @@
+/* ─── Layout público (share.html.erb) ───────────────────────────── */
+.share-page {
+  min-height: 100vh;
+  background-color: var(--color-bg-surface);
+  display: flex;
+  flex-direction: column;
+}
+
+.share-header {
+  background-color: var(--color-topbar);
+  padding: 0.75rem 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.share-header__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-topbar-text);
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+}
+
+.share-header__logo {
+  height: 1.5rem;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+.share-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 2rem 1rem;
+}
+
+/* ─── Card da lista compartilhada ───────────────────────────────── */
+.share-list {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 2rem;
+  width: 100%;
+  max-width: 600px;
+  align-self: flex-start;
+  box-shadow: 0 4px 24px rgba(150, 51, 255, 0.06);
+}
+
+.share-list__header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.share-list__color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.share-list__title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.share-list__description {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  margin-bottom: 1.25rem;
+}
+
+.share-list__empty {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+  padding: 1rem 0;
+}
+
+.share-list__footer {
+  margin-top: 1.5rem;
+  font-size: 0.775rem;
+  color: var(--color-text-muted);
+  text-align: center;
+  border-top: 1px solid var(--color-border);
+  padding-top: 1rem;
+}
+
+/* ─── Itens da lista compartilhada ──────────────────────────────── */
+.share-items {
+  list-style: none;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.share-item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem 0.5rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+}
+
+.share-item:hover {
+  background-color: var(--color-bg-surface);
+}
+
+.share-item--completed .share-item__title {
+  text-decoration: line-through;
+  color: var(--color-text-muted);
+}
+
+.share-item__check {
+  font-size: 0.9rem;
+  color: var(--color-primary);
+  flex-shrink: 0;
+  width: 1rem;
+  text-align: center;
+}
+
+.share-item--completed .share-item__check {
+  color: var(--color-text-muted);
+}
+
+.share-item__title {
+  flex: 1;
+  color: var(--color-text);
+}
+
+.share-item__due {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+/* ─── Painel de compartilhamento (no expanded panel) ────────────── */
+.share-panel {
+  border-top: 1px solid var(--color-border);
+  padding-top: 0.85rem;
+  margin-top: 0.5rem;
+}
+
+.share-panel__label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 0.5rem;
+}
+
+.share-panel__link-row {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.share-panel__url {
+  flex: 1;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  outline: none;
+  min-width: 0;
+}
+
+.share-panel__controls {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.share-panel__controls .button_to,
+.share-panel__controls form {
+  display: contents;
+}
+
+.share-panel__inactive .button_to,
+.share-panel__inactive form {
+  display: contents;
+}
+
+.share-panel__revoke-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  background-color: transparent;
+  color: var(--color-secondary);
+  border: 1px solid var(--color-secondary);
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.12s, color 0.12s;
+}
+
+.share-panel__revoke-btn:hover {
+  background-color: var(--color-secondary);
+  color: #fff;
+}

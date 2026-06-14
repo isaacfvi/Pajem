@@ -41,4 +41,6 @@
   <div id="new_item_form_<%= list.id %>" class="list-expanded__new-form">
     <%= render "items/new_form", item: Item.new, list: list %>
   </div>
+
+  <%= render "lists/share_panel", list: list %>
 </div>
