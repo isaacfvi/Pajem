@@ -1,0 +1,21 @@
+<div class="auth-card">
+  <h1 class="auth-card__title">Reativar conta</h1>
+  <p class="auth-card__subtitle">Informe seu e-mail para receber um novo link de reativação.</p>
+
+  <%= form_with url: resend_reactivation_conta_path, method: :post, class: "auth-form" do |f| %>
+    <div class="auth-form__group">
+      <%= f.label :email, "E-mail", class: "auth-form__label" %>
+      <%= f.email_field :email,
+            class: "auth-form__input",
+            placeholder: "seu@email.com",
+            autocomplete: "email",
+            required: true %>
+    </div>
+
+    <%= f.submit "Reenviar link", class: "btn btn--primary auth-form__submit" %>
+  <% end %>
+
+  <p class="auth-card__footer">
+    <%= link_to "Voltar ao login", login_path %>
+  </p>
+</div>

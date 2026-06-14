@@ -12,7 +12,12 @@ class SessionsController < ApplicationController
       session[:user_id] = user.id
       redirect_to session.delete(:return_to) || root_path, notice: "Bem-vindo de volta, #{user.name}!"
     else
-      flash.now[:alert] = "E-mail ou senha inválidos."
+      deactivated = User.unscoped.find_by(email: params[:email].to_s.downcase.strip)
+      if deactivated&.discarded? && deactivated.authenticate(params[:password])
+        flash.now[:alert] = "Conta desativada. Verifique seu e-mail para reativá-la."
+      else
+        flash.now[:alert] = "E-mail ou senha inválidos."
+      end
       render :new, status: :unprocessable_entity
     end
   end
