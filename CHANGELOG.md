@@ -6,6 +6,13 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 ---
 
+## [0.3.0](https://github.com/isaacfvi/Pajem/compare/v0.2.0...v0.3.0) (2026-06-14)
+
+
+### Adicionado
+
+* new version ([f15344f](https://github.com/isaacfvi/Pajem/commit/f15344f93d9a64c96a1bd85cf3bcc40b247f059a))
+
 ## [0.2.0](https://github.com/isaacfvi/Pajem/compare/v0.1.1...v0.2.0) (2026-06-13)
 
 
