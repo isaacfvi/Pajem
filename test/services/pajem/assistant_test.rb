@@ -45,24 +45,23 @@ class Pajem::AssistantTest < ActiveSupport::TestCase
     assert result[:tool_results].any? { |r| r[:message].include?("Compras") }
   end
 
-  # ─── delete interrompe o loop ─────────────────────────────────────────
+  # ─── delete executa direto (soft delete via lixeira) ─────────────────
 
-  test "interrompe loop e retorna confirmation_needed ao solicitar delete_list" do
+  test "executa delete_list direto sem pedir confirmação" do
     list = @alice.lists.create!(title: "Deletar")
-    client = FakeClient.new(fn_call_response("delete_list", { list_id: list.id }))
+    client = FakeClient.new(fn_call_response("delete_list", { list_id: list.id }), text_response)
     result = Pajem::Assistant.new(user: @alice, client: client).call(user_message: "exclui a lista")
-    assert_equal :confirmation_needed, result[:type]
-    assert_equal "delete_list", result[:tool]
-    assert list.reload.kept?
+    assert_equal :completed, result[:type]
+    assert list.reload.discarded?
   end
 
-  test "interrompe loop ao solicitar delete_item" do
+  test "executa delete_item direto sem pedir confirmação" do
     list = @alice.lists.create!(title: "Lista")
     item = list.items.create!(title: "Item", user: @alice)
-    client = FakeClient.new(fn_call_response("delete_item", { item_id: item.id }))
+    client = FakeClient.new(fn_call_response("delete_item", { item_id: item.id }), text_response)
     result = Pajem::Assistant.new(user: @alice, client: client).call(user_message: "exclui o item")
-    assert_equal :confirmation_needed, result[:type]
-    assert item.reload.kept?
+    assert_equal :completed, result[:type]
+    assert item.reload.discarded?
   end
 
   # ─── limite de iterações ──────────────────────────────────────────────

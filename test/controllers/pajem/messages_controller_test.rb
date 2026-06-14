@@ -59,12 +59,11 @@ class Pajem::MessagesControllerTest < ActionDispatch::IntegrationTest
     assert_equal "text/vnd.turbo-stream.html; charset=utf-8", response.content_type
   end
 
-  test "salva metadata quando assistente solicita confirmação" do
-    list = @alice.lists.create!(title: "A Excluir")
-
+  test "não salva metadata de confirmação pendente" do
     with_stubs(
       [ Pajem::Guardrails, fake_service(:call, { in_scope: true }) ],
-      [ Pajem::Assistant,  fake_service(:call, { type: :confirmation_needed, tool: "delete_list", params: { "list_id" => list.id } }) ]
+      [ Pajem::Assistant,  fake_service(:call, { type: :completed, tool_results: [] }) ],
+      [ Pajem::Responder,  fake_service(:call, "Feito.") ]
     ) do
       post pajem_messages_path,
            params: { message: "exclui a lista" },
@@ -72,23 +71,7 @@ class Pajem::MessagesControllerTest < ActionDispatch::IntegrationTest
     end
 
     assistant_msg = @alice.chat_messages.where(role: "assistant").last
-    assert assistant_msg.metadata["pending_confirmation"].present?
-    assert_equal "delete_list", assistant_msg.metadata.dig("pending_confirmation", "tool")
-  end
-
-  test "executa delete após confirmação do usuário" do
-    list = @alice.lists.create!(title: "A Excluir")
-    pending = { "tool" => "delete_list", "params" => { "list_id" => list.id.to_s } }
-    ChatMessage.create!(user: @alice, role: "assistant", content: "Confirma?",
-                        metadata: { "pending_confirmation" => pending })
-
-    with_stubs([ Pajem::Responder, fake_service(:call, "Excluído.") ]) do
-      post pajem_messages_path,
-           params: { message: "sim" },
-           headers: { "Accept" => "text/vnd.turbo-stream.html" }
-    end
-
-    assert_nil @alice.lists.find_by(id: list.id)
+    assert_nil assistant_msg.metadata
   end
 
   private
