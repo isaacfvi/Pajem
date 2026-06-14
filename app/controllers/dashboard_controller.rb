@@ -1,17 +1,28 @@
 class DashboardController < ApplicationController
   def index
-    @lists_count     = current_user.lists.kept.count
-    @pending_count   = current_user.items.kept.where(completed: false).count
-    @completed_count = current_user.items.kept.where(completed: true).count
-    @overdue_count   = current_user.items.kept
-                                   .where(completed: false)
-                                   .where("due_date < ?", Date.today).count
+    stats = Rails.cache.fetch([ "dashboard/stats", current_user.id ], expires_in: 5.minutes) do
+      {
+        lists_count:         current_user.lists.kept.count,
+        pending_count:       current_user.items.kept.where(completed: false).count,
+        completed_count:     current_user.items.kept.where(completed: true).count,
+        overdue_count:       current_user.items.kept.where(completed: false).where("due_date < ?", Date.today).count,
+        progress_by_context: build_context_progress
+      }
+    end
+
+    @lists_count          = stats[:lists_count]
+    @pending_count        = stats[:pending_count]
+    @completed_count      = stats[:completed_count]
+    @overdue_count        = stats[:overdue_count]
+    @progress_by_context  = stats[:progress_by_context]
 
     @chart_period = (params[:period] || 7).to_i.clamp(1, 90)
-    @completed_by_day = current_user.items.kept
-                                    .where(completed: true)
-                                    .group_by_day(:completed_at, range: (@chart_period - 1).days.ago..Time.now)
-                                    .count
+    @completed_by_day = Rails.cache.fetch([ "dashboard/chart", current_user.id, @chart_period ], expires_in: 5.minutes) do
+      current_user.items.kept
+                  .where(completed: true)
+                  .group_by_day(:completed_at, range: (@chart_period - 1).days.ago..Time.now)
+                  .count
+    end
 
     context_scope = if params[:chart_context_id].present?
                       current_user.items.kept
@@ -26,8 +37,6 @@ class DashboardController < ApplicationController
                            .group(:priority)
                            .count
                            .transform_keys { |k| Item::PRIORITY_LABELS[k] || "Sem prioridade" }
-
-    @progress_by_context = build_context_progress
 
     @upcoming_items = current_user.items.kept
                                   .where(completed: false)

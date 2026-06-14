@@ -26,6 +26,7 @@ class List < ApplicationRecord
   after_create_commit  :broadcast_list_created
   after_update_commit  :broadcast_list_updated
   after_destroy_commit :broadcast_list_destroyed
+  after_commit         :bust_dashboard_cache
 
   def progress
     total = items.kept.count
@@ -77,5 +78,9 @@ class List < ApplicationRecord
   def broadcast_list_destroyed
     broadcast_remove_to [ user, :lists ], target: dom_id(self)
     broadcast_remove_to [ user, :lists ], target: dom_id(self, :panel)
+  end
+
+  def bust_dashboard_cache
+    Rails.cache.delete_matched("dashboard/*#{user_id}*")
   end
 end

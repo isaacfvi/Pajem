@@ -10,6 +10,7 @@ class Context < ApplicationRecord
   after_create_commit  :broadcast_context_created
   after_update_commit  :broadcast_context_updated
   after_destroy_commit :broadcast_context_destroyed
+  after_commit         :bust_dashboard_cache
 
   private
 
@@ -29,5 +30,9 @@ class Context < ApplicationRecord
 
   def broadcast_context_destroyed
     broadcast_remove_to [ user, :contexts ], target: dom_id(self)
+  end
+
+  def bust_dashboard_cache
+    Rails.cache.delete_matched("dashboard/*#{user_id}*")
   end
 end
