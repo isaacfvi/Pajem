@@ -40,5 +40,5 @@ Rails.application.routes.draw do
   patch  "/lixeira/itens/:id/restaurar",   to: "trash#restore_item", as: :restore_trash_item
   delete "/lixeira/itens/:id",             to: "trash#destroy_item", as: :trash_item
 
-  root to: "lists#index"
+  root to: "dashboard#index"
 end
