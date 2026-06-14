@@ -4,7 +4,7 @@ class AuditLogsController < ApplicationController
                                .includes(:auditable)
                                .order(created_at: :desc)
 
-    action_filter = request.query_parameters[ "action" ]
+    action_filter = request.query_parameters["action"]
     @audit_logs = @audit_logs.where(action: action_filter)                                   if action_filter.present?
     @audit_logs = @audit_logs.where(origin: params[:origin])                                 if params[:origin].present?
     @audit_logs = @audit_logs.where("created_at >= ?", params[:date_from].to_date)           if params[:date_from].present?
