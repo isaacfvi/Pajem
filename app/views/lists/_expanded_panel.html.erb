@@ -1,0 +1,44 @@
+<%
+  palette     = List::PALETTE.find { |p| p[:bg] == list.color }
+  color_class = palette ? "colored-card #{palette[:css]}" : ""
+  panel_items = list.items.kept.to_a
+                    .sort_by { |i| [ i.completed ? 1 : 0, -(Item.priorities[i.priority] || -1), i.created_at.to_f ] }
+%>
+<div id="<%= dom_id(list, :panel) %>"
+     class="list-expanded hidden <%= color_class %>"
+     data-list-expand-target="panel"
+     data-list-id="<%= list.id %>">
+  <%= turbo_stream_from list %>
+
+  <div class="list-expanded__header">
+    <div>
+      <h2 class="list-expanded__title"><%= list.title %></h2>
+      <% if list.description.present? || list.context %>
+        <p class="list-expanded__subtitle">
+          <%= list.description.presence || list.context&.name %>
+        </p>
+      <% end %>
+    </div>
+    <div class="list-expanded__header-actions">
+      <%= link_to "Editar", edit_list_path(list), class: "btn btn--ghost" %>
+      <button class="btn btn--ghost" data-action="click->list-expand#collapse">Fechar</button>
+    </div>
+  </div>
+
+  <div id="<%= dom_id(list, :progress) %>_panel">
+    <%= render "lists/progress_bar", list: list %>
+  </div>
+
+  <div id="list_items_<%= list.id %>" class="list-expanded__items">
+    <% if panel_items.empty? %>
+      <p id="list_empty_<%= list.id %>" class="list-expanded__empty">Nenhum item nesta lista.</p>
+    <% end %>
+    <% panel_items.each do |item| %>
+      <%= render "items/item", item: item, list: list %>
+    <% end %>
+  </div>
+
+  <div id="new_item_form_<%= list.id %>" class="list-expanded__new-form">
+    <%= render "items/new_form", item: Item.new, list: list %>
+  </div>
+</div>

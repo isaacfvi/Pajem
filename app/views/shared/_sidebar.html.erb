@@ -20,27 +20,13 @@
 
   <p class="sidebar__section-label">Workspaces</p>
 
-  <% @sidebar_contexts.each do |context| %>
-    <div class="sidebar__context-item">
-      <a href="<%= lists_path(context_id: context.id) %>"
-         class="sidebar__link <%= 'sidebar__link--active' if params[:context_id] == context.id.to_s %>">
-        <span class="sidebar__link-icon">&#9670;</span>
-        <%= context.name %>
-      </a>
-      <div class="sidebar__context-actions">
-        <%= link_to edit_context_path(context), class: "sidebar__context-btn", title: "Editar workspace" do %>
-          &#9998;
-        <% end %>
-        <button class="sidebar__context-btn sidebar__context-btn--danger"
-                title="Excluir workspace"
-                data-action="click->context-delete#open"
-                data-context-delete-name-param="<%= context.name %>"
-                data-context-delete-id-param="<%= context.id %>">
-          &#10005;
-        </button>
-      </div>
-    </div>
-  <% end %>
+  <%= turbo_stream_from [ current_user, :contexts ] %>
+
+  <div id="sidebar_contexts">
+    <% @sidebar_contexts.each do |context| %>
+      <%= render "contexts/context_item", context: context %>
+    <% end %>
+  </div>
 
   <div data-controller="inline-context">
     <button class="sidebar__action"

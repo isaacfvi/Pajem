@@ -62,21 +62,32 @@
       <div class="pajem-widget" data-controller="pajem-chat">
         <div class="pajem-chat" data-pajem-chat-target="panel" hidden>
           <div class="pajem-chat__header">
-            <div class="pajem-chat__header-avatar-placeholder">P</div>
+            <img src="/Pajem.jpg" alt="Pajem" class="pajem-chat__header-avatar">
             <span class="pajem-chat__header-name">Pajem</span>
             <button class="pajem-chat__close"
                     data-action="click->pajem-chat#close"
                     aria-label="Fechar chat">&#x2715;</button>
           </div>
-          <div class="pajem-chat__messages">
-            <p class="pajem-chat__welcome">Olá! Como posso ajudar?</p>
+          <div class="pajem-chat__messages"
+               id="pajem-messages"
+               data-pajem-chat-target="messages">
+            <p class="pajem-chat__welcome">Olá! Estou aqui para cuidar das suas listas.</p>
           </div>
           <div class="pajem-chat__footer">
-            <input type="text"
-                   class="pajem-chat__input"
-                   placeholder="Digite um comando..."
-                   aria-label="Mensagem para o Pajem">
-            <button class="pajem-chat__send">Enviar</button>
+            <form id="pajem-form"
+                  action="<%= pajem_messages_path %>"
+                  method="post"
+                  data-action="turbo:submit-start->pajem-chat#onSubmitStart turbo:submit-end->pajem-chat#onSubmitEnd">
+              <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+              <input type="text"
+                     name="message"
+                     class="pajem-chat__input"
+                     data-pajem-chat-target="input"
+                     placeholder="Digite um comando..."
+                     aria-label="Mensagem para o Pajem"
+                     autocomplete="off">
+              <button type="submit" class="pajem-chat__send">Enviar</button>
+            </form>
           </div>
         </div>
 
@@ -84,7 +95,7 @@
                 data-action="click->pajem-chat#toggle"
                 data-pajem-chat-target="btn"
                 aria-label="Abrir assistente Pajem">
-          <div class="pajem-widget__avatar-placeholder">P</div>
+          <img src="/Pajem.jpg" alt="Pajem" class="pajem-widget__avatar">
         </button>
       </div>
     <% else %>

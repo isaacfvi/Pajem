@@ -22,5 +22,9 @@ Rails.application.routes.draw do
     end
   end
 
+  namespace :pajem do
+    resources :messages, path: "/mensagens", only: [ :create ]
+  end
+
   root to: "lists#index"
 end
