@@ -1,0 +1,18 @@
+<div id="<%= dom_id(context) %>" class="sidebar__context-item">
+  <a href="<%= lists_path(context_id: context.id) %>" class="sidebar__link">
+    <span class="sidebar__link-icon">&#9670;</span>
+    <%= context.name %>
+  </a>
+  <div class="sidebar__context-actions">
+    <%= link_to edit_context_path(context), class: "sidebar__context-btn", title: "Editar workspace" do %>
+      &#9998;
+    <% end %>
+    <button class="sidebar__context-btn sidebar__context-btn--danger"
+            title="Excluir workspace"
+            data-action="click->context-delete#open"
+            data-context-delete-name-param="<%= context.name %>"
+            data-context-delete-id-param="<%= context.id %>">
+      &#10005;
+    </button>
+  </div>
+</div>

@@ -23,6 +23,10 @@ class List < ApplicationRecord
   validates :color, inclusion: { in: PALETTE_COLORS }, allow_nil: true
   validates :user, presence: true
 
+  after_create_commit  :broadcast_list_created
+  after_update_commit  :broadcast_list_updated
+  after_destroy_commit :broadcast_list_destroyed
+
   def progress
     total = items.kept.count
     return 0 if total.zero?
@@ -31,5 +35,39 @@ class List < ApplicationRecord
 
   def active_items
     items.kept
+  end
+
+  private
+
+  def broadcast_list_created
+    broadcast_append_to [ user, :lists ],
+      target:  "postit_grid",
+      partial: "lists/postit_card",
+      locals:  { list: self }
+    broadcast_append_to [ user, :lists ],
+      target:  "lists-page",
+      partial: "lists/expanded_panel",
+      locals:  { list: self }
+  end
+
+  def broadcast_list_updated
+    if saved_change_to_deleted_at? && discarded?
+      broadcast_remove_to [ user, :lists ], target: dom_id(self)
+      broadcast_remove_to [ user, :lists ], target: dom_id(self, :panel)
+    else
+      broadcast_replace_to [ user, :lists ],
+        target:  dom_id(self),
+        partial: "lists/postit_card",
+        locals:  { list: self }
+      broadcast_replace_to [ user, :lists ],
+        target:  dom_id(self, :panel),
+        partial: "lists/expanded_panel",
+        locals:  { list: self }
+    end
+  end
+
+  def broadcast_list_destroyed
+    broadcast_remove_to [ user, :lists ], target: dom_id(self)
+    broadcast_remove_to [ user, :lists ], target: dom_id(self, :panel)
   end
 end
