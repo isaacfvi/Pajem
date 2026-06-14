@@ -1,0 +1,120 @@
+<% content_for :page_title, "Dashboard" %>
+
+<%# ─── Contadores ──────────────────────────────────────────────────── %>
+<div class="dashboard__stats">
+  <%= link_to lists_path, class: "stat-card" do %>
+    <span class="stat-card__value"><%= @lists_count %></span>
+    <span class="stat-card__label">Listas ativas</span>
+  <% end %>
+
+  <%= link_to lists_path, class: "stat-card" do %>
+    <span class="stat-card__value"><%= @pending_count %></span>
+    <span class="stat-card__label">Itens pendentes</span>
+  <% end %>
+
+  <%= link_to lists_path, class: "stat-card" do %>
+    <span class="stat-card__value"><%= @completed_count %></span>
+    <span class="stat-card__label">Itens concluídos</span>
+  <% end %>
+
+  <%= link_to lists_path, class: [ "stat-card", ("stat-card--overdue" if @overdue_count > 0) ] do %>
+    <span class="stat-card__value"><%= @overdue_count %></span>
+    <span class="stat-card__label">Vencidos</span>
+  <% end %>
+</div>
+
+<%# ─── Gráficos: bar + pie ────────────────────────────────────────── %>
+<div class="dashboard__charts">
+  <div class="dashboard__chart-card">
+    <%= column_chart @completed_by_day,
+          title: "Itens concluídos nos últimos 7 dias",
+          colors: [ "#FF5C13" ],
+          library: { scales: { y: { ticks: { precision: 0 } } } } %>
+  </div>
+
+  <div class="dashboard__chart-card">
+    <%= pie_chart @items_by_priority.presence || { "Sem itens" => 1 },
+          title: "Distribuição por prioridade",
+          colors: [ "#FF5C13", "#FF5C13", "#B86AFF", "#DDD0FF" ],
+          donut: true %>
+  </div>
+</div>
+
+<%# ─── Gráfico: radar por contexto ───────────────────────────────── %>
+<% if @progress_by_context.any? %>
+  <div class="dashboard__chart-card dashboard__chart-card--full">
+    <%= bar_chart @progress_by_context,
+          title: "Progresso por workspace (%)",
+          colors: [ "#FF5C13" ],
+          min: 0,
+          max: 100,
+          suffix: "%" %>
+  </div>
+<% end %>
+
+<%# ─── Duas colunas: prazo próximo + atividade recente ───────────── %>
+<div class="dashboard__bottom">
+
+  <%# Itens com prazo %>
+  <div class="dashboard__section">
+    <h2 class="dashboard__section-title">Prazo próximo</h2>
+
+    <% if @upcoming_items.empty? %>
+      <p class="dashboard__empty">Nenhum item com prazo definido.</p>
+    <% else %>
+      <ul class="due-list">
+        <% @upcoming_items.each do |item| %>
+          <%
+            status_class = if item.due_date < Date.today then "due-item--overdue"
+                           elsif item.due_date == Date.today then "due-item--today"
+                           else "" end
+          %>
+          <li class="due-item <%= status_class %>">
+            <div class="due-item__info">
+              <span class="due-item__title"><%= item.title %></span>
+              <span class="due-item__list"><%= item.list&.title %></span>
+            </div>
+            <span class="due-item__date"><%= format_audit_time(item.due_date.to_time) %></span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </div>
+
+  <%# Atividade recente %>
+  <div class="dashboard__section">
+    <h2 class="dashboard__section-title">Atividade recente</h2>
+
+    <% if @recent_activity.empty? %>
+      <p class="dashboard__empty">Nenhuma atividade registrada.</p>
+    <% else %>
+      <ul class="activity-list">
+        <% @recent_activity.each do |log| %>
+          <li class="activity-item">
+            <div class="activity-item__meta">
+              <span class="activity-item__origin activity-item__origin--<%= log.origin %>">
+                <%= AuditLog::ORIGIN_LABELS[log.origin] %>
+              </span>
+              <span class="activity-item__time"><%= time_ago_in_words(log.created_at) %> atrás</span>
+            </div>
+            <p class="activity-item__desc">
+              <% resource = log.auditable %>
+              <% resource_label = AuditLog::RESOURCE_LABELS[log.auditable_type] || log.auditable_type %>
+              <% action_label = AuditLog::ACTION_LABELS[log.action] || log.action %>
+              <% if resource %>
+                <%= resource_label %> <strong>"<%= resource.try(:title) || resource.try(:name) %>"</strong> foi <%= action_label %>
+              <% else %>
+                <%= resource_label %> (removido) foi <%= action_label %>
+              <% end %>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+
+      <div class="dashboard__section-footer">
+        <%= link_to "Ver histórico completo →", audit_logs_path %>
+      </div>
+    <% end %>
+  </div>
+
+</div>
