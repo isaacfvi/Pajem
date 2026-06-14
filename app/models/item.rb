@@ -23,6 +23,7 @@ class Item < ApplicationRecord
   after_create_commit  :broadcast_item_created
   after_update_commit  :broadcast_item_updated
   after_destroy_commit :broadcast_item_destroyed
+  after_commit         :bust_dashboard_cache
 
   before_save :manage_completed_at
 
@@ -72,5 +73,9 @@ class Item < ApplicationRecord
     elsif !completed?
       self.completed_at = nil
     end
+  end
+
+  def bust_dashboard_cache
+    Rails.cache.delete_matched("dashboard/*#{user_id}*")
   end
 end
