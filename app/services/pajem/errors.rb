@@ -1,3 +1,5 @@
 module Pajem
-  class RateLimitError < StandardError; end
+  module Errors
+    class RateLimitError < StandardError; end
+  end
 end

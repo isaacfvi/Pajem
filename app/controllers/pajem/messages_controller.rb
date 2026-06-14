@@ -20,7 +20,7 @@ module Pajem
       respond_to do |format|
         format.turbo_stream
       end
-    rescue Pajem::RateLimitError
+    rescue Pajem::Errors::RateLimitError
       @error_message        = "Estarei de volta em breve — atingi meu limite de requisições por hoje."
       @user_message_content = params[:message].to_s.strip
       respond_to do |format|

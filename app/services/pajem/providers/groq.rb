@@ -50,7 +50,7 @@ module Pajem
         response = http.request(req)
 
         unless response.is_a?(Net::HTTPSuccess)
-          raise Pajem::RateLimitError if response.code == "429"
+          raise Pajem::Errors::RateLimitError if response.code == "429"
           raise "Groq API error #{response.code}: #{response.body}"
         end
 
