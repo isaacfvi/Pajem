@@ -1,0 +1,95 @@
+<% content_for :page_title, "Lixeira" %>
+
+<% if @discarded_lists.empty? && @discarded_items.empty? %>
+  <div class="trash-all-empty">
+    <div class="trash-all-empty__icon">&#128465;</div>
+    <p class="trash-all-empty__text">A lixeira está vazia.</p>
+  </div>
+<% else %>
+
+  <%# ── Listas excluídas ───────────────────────────────────────────── %>
+  <section class="trash-section">
+    <h2 class="trash-section__title">
+      Listas excluídas
+      <span class="trash-section__count" id="trash-lists-count"><%= @discarded_lists.size %></span>
+    </h2>
+
+    <% if @discarded_lists.empty? %>
+      <p class="trash-empty-inline">Nenhuma lista excluída.</p>
+    <% else %>
+      <ul class="trash-list" id="trash-lists">
+        <% @discarded_lists.each do |list| %>
+          <li class="trash-entry" id="trash_list_<%= list.id %>">
+            <div class="trash-entry__color-dot"
+                 <% if list.color %> style="background-color: <%= list.color %>" <% end %>></div>
+
+            <div class="trash-entry__info">
+              <span class="trash-entry__title"><%= list.title %></span>
+              <span class="trash-entry__meta">
+                excluída em <%= format_audit_time(list.deleted_at) %>
+              </span>
+            </div>
+
+            <div class="trash-entry__actions">
+              <%= button_to "Restaurar", restore_trash_list_path(list),
+                    method: :patch,
+                    class: "btn btn--ghost btn--sm" %>
+              <%= button_to "Excluir permanentemente", trash_list_path(list),
+                    method: :delete,
+                    class: "trash-entry__destroy-btn",
+                    data: { turbo_confirm: "Excluir '#{list.title}' permanentemente? Esta ação não pode ser desfeita." } %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+  <%# ── Itens excluídos ────────────────────────────────────────────── %>
+  <section class="trash-section">
+    <h2 class="trash-section__title">
+      Itens excluídos
+      <span class="trash-section__count" id="trash-items-count"><%= @discarded_items.size %></span>
+    </h2>
+
+    <% if @discarded_items.empty? %>
+      <p class="trash-empty-inline">Nenhum item excluído.</p>
+    <% else %>
+      <ul class="trash-list" id="trash-items">
+        <% @discarded_items.each do |item| %>
+          <% parent_list = @parent_lists_by_id[item.list_id] %>
+          <li class="trash-entry" id="trash_item_<%= item.id %>">
+            <div class="trash-entry__color-dot trash-entry__color-dot--item"></div>
+
+            <div class="trash-entry__info">
+              <span class="trash-entry__title"><%= item.title %></span>
+              <span class="trash-entry__meta">
+                <% if parent_list.nil? %>
+                  lista removida &middot;
+                <% elsif parent_list.discarded? %>
+                  <span class="trash-entry__parent-warning">
+                    lista "<%= parent_list.title %>" também na lixeira
+                  </span> &middot;
+                <% else %>
+                  lista "<%= parent_list.title %>" &middot;
+                <% end %>
+                excluído em <%= format_audit_time(item.deleted_at) %>
+              </span>
+            </div>
+
+            <div class="trash-entry__actions">
+              <%= button_to "Restaurar", restore_trash_item_path(item),
+                    method: :patch,
+                    class: "btn btn--ghost btn--sm" %>
+              <%= button_to "Excluir permanentemente", trash_item_path(item),
+                    method: :delete,
+                    class: "trash-entry__destroy-btn",
+                    data: { turbo_confirm: "Excluir '#{item.title}' permanentemente? Esta ação não pode ser desfeita." } %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  </section>
+
+<% end %>

@@ -28,5 +28,11 @@ Rails.application.routes.draw do
 
   get "/historico", to: "audit_logs#index", as: :audit_logs
 
+  get    "/lixeira",                       to: "trash#index",        as: :trash
+  patch  "/lixeira/listas/:id/restaurar",  to: "trash#restore_list", as: :restore_trash_list
+  delete "/lixeira/listas/:id",            to: "trash#destroy_list", as: :trash_list
+  patch  "/lixeira/itens/:id/restaurar",   to: "trash#restore_item", as: :restore_trash_item
+  delete "/lixeira/itens/:id",             to: "trash#destroy_item", as: :trash_item
+
   root to: "lists#index"
 end
