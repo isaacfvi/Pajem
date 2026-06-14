@@ -39,7 +39,7 @@ class AccountsControllerTest < ActionDispatch::IntegrationTest
       new_password_confirmation: "novaSenha999"
     }
     assert_response :unprocessable_entity
-    assert_nil @alice.reload.authenticate("novaSenha999")
+    assert_not @alice.reload.authenticate("novaSenha999")
   end
 
   test "PATCH /conta falha quando confirmação não confere" do
