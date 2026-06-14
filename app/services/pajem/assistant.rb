@@ -1,7 +1,6 @@
 module Pajem
   class Assistant
-    MAX_ITERATIONS   = 6
-    DESTRUCTIVE_TOOLS = %w[ delete_list delete_item ].freeze
+    MAX_ITERATIONS = 6
 
     def initialize(user:, client: Pajem::LLMClient.new)
       @user   = user
@@ -16,16 +15,6 @@ module Pajem
         response   = @client.generate(system: system_prompt, messages: messages, tools: ToolDefinitions.all)
         tool_calls = response[:tool_calls]
         break if tool_calls.empty?
-
-        # Interrupt for destructive tools — do not execute, await confirmation
-        destructive = tool_calls.find { |tc| DESTRUCTIVE_TOOLS.include?(tc[:name]) }
-        if destructive
-          return {
-            type:   :confirmation_needed,
-            tool:   destructive[:name],
-            params: (destructive[:args] || {}).transform_keys(&:to_s)
-          }
-        end
 
         # Record assistant turn in OpenAI format so Groq can match tool results
         messages << {
@@ -70,6 +59,10 @@ module Pajem
           1. list_lists → obter o list_id real
           2. list_items com o list_id real → obter o item_id real
           3. complete_item / uncomplete_item / delete_item com o item_id real
+
+        Para excluir uma lista:
+          1. list_lists → obter o list_id real
+          2. delete_list com o list_id real
 
         Para criar lista ou contexto: execute diretamente (não precisa de lookup).
 
