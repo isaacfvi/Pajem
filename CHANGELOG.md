@@ -6,6 +6,17 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 ---
 
+## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v0.3.0...v1.0.0) (2026-06-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* release 1.0.0 — aplicação completa com assistente, dashboard e configurações
+
+### Adicionado
+
+* release 1.0.0 — aplicação completa com assistente, dashboard e configurações ([d7b8045](https://github.com/isaacfvi/Pajem/commit/d7b80455ef0b66ecce07f93f3668c6ae1050552e))
+
 ## [0.3.0](https://github.com/isaacfvi/Pajem/compare/v0.2.0...v0.3.0) (2026-06-14)
 
 
