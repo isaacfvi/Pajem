@@ -76,6 +76,6 @@ class Item < ApplicationRecord
   end
 
   def bust_dashboard_cache
-    Rails.cache.delete_matched("dashboard/*#{user_id}*")
+    Rails.cache.write("dashboard/version/#{user_id}", Time.now.to_i)
   end
 end
