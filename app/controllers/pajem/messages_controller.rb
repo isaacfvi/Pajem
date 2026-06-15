@@ -36,7 +36,7 @@ module Pajem
     private
 
     def handle_new_message(message_text, history)
-      guardrails = Guardrails.new.call(message_text)
+      guardrails = Guardrails.new.call(message_text, history: history)
       return [ guardrails[:response], nil ] unless guardrails[:in_scope]
 
       result = Assistant.new(user: current_user).call(user_message: message_text, history: history)
