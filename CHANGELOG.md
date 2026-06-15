@@ -6,6 +6,39 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 ---
 
+## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v1.0.0...v1.0.0) (2026-06-15)
+
+
+### Adicionado
+
+* cache ([#53](https://github.com/isaacfvi/Pajem/issues/53)) ([25bd295](https://github.com/isaacfvi/Pajem/commit/25bd2953270cfe92ee39a863d292b7e642accc45))
+* cache do dashboard com invalidação por modelo ([672f8bf](https://github.com/isaacfvi/Pajem/commit/672f8bf170b98f1698903506b7c8dea371e7d207))
+* correção de bugs ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* migrate LLM provider to OpenAI and fix Pajem assistant reliability ([d9d68f1](https://github.com/isaacfvi/Pajem/commit/d9d68f132f17001392148516d6ae3315af8c523a))
+* migrate LLM provider to OpenAI and fix Pajem assistant reliability ([573590f](https://github.com/isaacfvi/Pajem/commit/573590f2109b9f158ba2ac1d364332b51d698cff))
+
+
+### Corrigido
+
+* broadcast_update_to para preservar wrapper do progress bar no painel ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* broadcast_update_to para preservar wrapper do progress bar no painel ([3a45071](https://github.com/isaacfvi/Pajem/commit/3a45071d9413845ee497a279ceae1da93a5d4ff7))
+* correct multi-database config for production ([1c7f970](https://github.com/isaacfvi/Pajem/commit/1c7f9704ee2d9ac255063047004f66e85cc94ce0))
+* correct palette color and enrich demo data with priorities, due dates and descriptions ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* correct palette color and enrich demo data with priorities, due dates and descriptions ([5c37fbc](https://github.com/isaacfvi/Pajem/commit/5c37fbc1db59ff3e01e549d1b0f1def959f63c54))
+* replace delete_matched in Context model (SolidCache compat) ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* replace delete_matched in Context model (SolidCache compat) ([46c4d39](https://github.com/isaacfvi/Pajem/commit/46c4d39a08e0154ea610f45f02616f55e581c031))
+* replace delete_matched with cache versioning (SolidCache compat) ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* replace delete_matched with cache versioning (SolidCache compat) ([694f9dd](https://github.com/isaacfvi/Pajem/commit/694f9dd65f623169641c6f8ee1741b7a8d5fcc4a))
+* replace solid adapter schema files with migrations for single-db deploy ([f39227b](https://github.com/isaacfvi/Pajem/commit/f39227b537486ae8780b46c41b673f7f160ee3ab))
+* replace solid adapter schema files with migrations for single-db deploy ([550e657](https://github.com/isaacfvi/Pajem/commit/550e6573184eb7c5fd6333f5f2f02d63c3ed43a5))
+* turbo-frame flex layout in expanded list panel ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* turbo-frame flex layout in expanded list panel ([b4b476e](https://github.com/isaacfvi/Pajem/commit/b4b476ebd2e623006a1c13e114f7a1c7e191b60a))
+
+
+### Documentação
+
+* update readme ([b395a42](https://github.com/isaacfvi/Pajem/commit/b395a423b17220a4d8e983a150abc70dd41b2f58))
+
 ## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v1.0.0...v1.0.0) (2026-06-14)
 
 
