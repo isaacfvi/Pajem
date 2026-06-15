@@ -4,13 +4,15 @@ module Pajem
       @client = client
     end
 
-    def call(message)
-      response = @client.generate(system: system_prompt, messages: [ { role: "user", content: message } ])
+    def call(message, history: [])
+      messages = history.map { |m| { role: m.role, content: m.content } }
+      messages << { role: "user", content: message }
+
+      response = @client.generate(system: system_prompt, messages: messages)
       text = response[:content].to_s.strip
 
       if text.match?(/\AFORA_DO_ESCOPO/i)
-        refusal = text.sub(/\AFORA_DO_ESCOPO:?\s*/i, "").strip
-        { in_scope: false, response: refusal.presence || default_refusal }
+        { in_scope: false, response: default_refusal }
       else
         { in_scope: true }
       end

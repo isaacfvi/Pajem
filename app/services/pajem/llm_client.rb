@@ -1,6 +1,6 @@
 module Pajem
   class LLMClient
-    def initialize(provider: Pajem::Providers::Groq.new)
+    def initialize(provider: Pajem::Providers::OpenAi.new)
       @provider = provider
     end
 
