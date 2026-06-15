@@ -61,7 +61,7 @@ class Item < ApplicationRecord
       target:  dom_id(fresh_list),
       partial: "lists/postit_card",
       locals:  { list: fresh_list }
-    broadcast_replace_to fresh_list,
+    broadcast_update_to fresh_list,
       target:  "#{dom_id(fresh_list, :progress)}_panel",
       partial: "lists/progress_bar",
       locals:  { list: fresh_list }
