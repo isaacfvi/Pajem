@@ -12,8 +12,9 @@ test:
   url: <%= ENV.fetch("TEST_DATABASE_URL", "postgres://pajem:secret@localhost:5432/pajem_test") %>
 
 production:
-  <<: *default
-  url: <%= ENV["DATABASE_URL"] %>
+  primary:
+    <<: *default
+    url: <%= ENV["DATABASE_URL"] %>
   queue:
     <<: *default
     url: <%= ENV["DATABASE_URL"] %>
