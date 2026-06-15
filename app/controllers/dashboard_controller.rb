@@ -1,6 +1,8 @@
 class DashboardController < ApplicationController
   def index
-    stats = Rails.cache.fetch([ "dashboard/stats", current_user.id ], expires_in: 5.minutes) do
+    cache_version = Rails.cache.read("dashboard/version/#{current_user.id}") || 0
+
+    stats = Rails.cache.fetch([ "dashboard/stats", current_user.id, cache_version ], expires_in: 5.minutes) do
       {
         lists_count:         current_user.lists.kept.count,
         pending_count:       current_user.items.kept.where(completed: false).count,
@@ -17,7 +19,7 @@ class DashboardController < ApplicationController
     @progress_by_context  = stats[:progress_by_context]
 
     @chart_period = (params[:period] || 7).to_i.clamp(1, 90)
-    @completed_by_day = Rails.cache.fetch([ "dashboard/chart", current_user.id, @chart_period ], expires_in: 5.minutes) do
+    @completed_by_day = Rails.cache.fetch([ "dashboard/chart", current_user.id, @chart_period, cache_version ], expires_in: 5.minutes) do
       current_user.items.kept
                   .where(completed: true)
                   .group_by_day(:completed_at, range: (@chart_period - 1).days.ago..Time.now)

@@ -61,7 +61,7 @@ class Item < ApplicationRecord
       target:  dom_id(fresh_list),
       partial: "lists/postit_card",
       locals:  { list: fresh_list }
-    broadcast_replace_to fresh_list,
+    broadcast_update_to fresh_list,
       target:  "#{dom_id(fresh_list, :progress)}_panel",
       partial: "lists/progress_bar",
       locals:  { list: fresh_list }
@@ -76,6 +76,6 @@ class Item < ApplicationRecord
   end
 
   def bust_dashboard_cache
-    Rails.cache.delete_matched("dashboard/*#{user_id}*")
+    Rails.cache.write("dashboard/version/#{user_id}", Time.now.to_i)
   end
 end

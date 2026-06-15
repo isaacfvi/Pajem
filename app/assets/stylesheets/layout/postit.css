@@ -131,6 +131,20 @@
   min-height: 0;
 }
 
+/* turbo-frame dentro do painel expandido precisa participar do flex para
+   que .list-expanded__items { flex:1 } funcione corretamente */
+.list-expanded > turbo-frame {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* elemento de subscription do ActionCable não deve ter presença visual */
+turbo-cable-stream-source {
+  display: none;
+}
+
 /* ─── Lista expandida (post-it grande) ──────────────────────────────── */
 .list-expanded {
   border-radius: 10px;
