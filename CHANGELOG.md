@@ -6,6 +6,32 @@ Formato baseado em [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/), 
 
 ---
 
+## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v1.0.0...v1.0.0) (2026-06-15)
+
+
+### Adicionado
+
+* cache ([#53](https://github.com/isaacfvi/Pajem/issues/53)) ([25bd295](https://github.com/isaacfvi/Pajem/commit/25bd2953270cfe92ee39a863d292b7e642accc45))
+* cache do dashboard com invalidação por modelo ([672f8bf](https://github.com/isaacfvi/Pajem/commit/672f8bf170b98f1698903506b7c8dea371e7d207))
+* correção de bugs ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+
+
+### Corrigido
+
+* broadcast_update_to para preservar wrapper do progress bar no painel ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* correct multi-database config for production ([1c7f970](https://github.com/isaacfvi/Pajem/commit/1c7f9704ee2d9ac255063047004f66e85cc94ce0))
+* correct palette color and enrich demo data with priorities, due dates and descriptions ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* replace delete_matched in Context model (SolidCache compat) ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* replace delete_matched with cache versioning (SolidCache compat) ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+* replace solid adapter schema files with migrations for single-db deploy ([f39227b](https://github.com/isaacfvi/Pajem/commit/f39227b537486ae8780b46c41b673f7f160ee3ab))
+* replace solid adapter schema files with migrations for single-db deploy ([550e657](https://github.com/isaacfvi/Pajem/commit/550e6573184eb7c5fd6333f5f2f02d63c3ed43a5))
+* turbo-frame flex layout in expanded list panel ([10bbb0a](https://github.com/isaacfvi/Pajem/commit/10bbb0accf1c9306aac1d97c5e36c49a4aea9c3d))
+
+
+### Documentação
+
+* update readme ([b395a42](https://github.com/isaacfvi/Pajem/commit/b395a423b17220a4d8e983a150abc70dd41b2f58))
+
 ## [1.0.0](https://github.com/isaacfvi/Pajem/compare/v1.0.0...v1.0.0) (2026-06-14)
 
 
